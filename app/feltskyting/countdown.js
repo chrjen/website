@@ -1,48 +1,62 @@
-cd_duration = 35_000;
+cd_audio = new Audio();
 cd_sections = [
     {
-        description: "Er skytterene klare?",
-        start: 0,
-        //duration: 5000,
-        bg_colour: "#045930",
-        audio: new Audio("audio/start.wav"),
-    }, {
-        description: "KLAR",
-        start: 5000,
-        //duration: 5000,
-        bg_colour: "#449940",
-       audio: new Audio("audio/klar.wav"),
-    }, {
-        description: "ILD",
-        start: 10_000,
-        //duration: 5000,
-        bg_colour: "#f4a930",
-       audio: new Audio("audio/ild.wav"),
-    }, {
-        description: "Staaaaaaans",
-        start: 33_000,
-        //duration: -2000,
-        bg_colour: "#e45930",
-        audio: new Audio("audio/stans.wav"),
-    }, {
-        description: "You have broken the universe!",
-        start: Number.MAX_VALUE,
-        bg_colour: "#000",
+        duration: 10_000,
+        seq: [
+            {
+                description: "Er skytterene klare?",
+                start: 0,
+                fg_colour: "#ffffff",
+                bg_colour: "#044910",
+                audio: new Audio("audio/start.wav"),
+            }, {
+                description: "KLAR",
+                start: 5000,
+                fg_colour: "#ffffff",
+                bg_colour: "#448950",
+                audio: new Audio("audio/klar.wav"),
+            }
+        ],
+    },
+    {
+        duration: 15_000,
+        seq: [
+            {
+                description: "ILD",
+                start: 0,
+                fg_colour: "#000000",
+                bg_colour: "#f4a930",
+                audio: new Audio("audio/ild.wav"),
+            }, {
+                description: "Staaaaaaans",
+                start: -2000,
+                fg_colour: "#000000",
+                bg_colour: "#e45930",
+                audio: new Audio("audio/stans.wav"),
+            }
+        ]
     }
 ]
 
 window.onload = function(){
-    let start_button = document.querySelector("#button-start-countdown");
+    start_button = document.querySelector("#button-start-countdown");
+    stop_button = document.querySelector("#button-stop-countdown");
     start_button.onclick = startCountdown;
+    stop_button.onclick = stopCountdown;
 }
 
 function startCountdown() {
+    start_button.disabled = true;
+    stop_button.disabled = false;
+
     let sec_idx = 0;
+    let seq_idx = 0;
 
     if (typeof cd_interval !== 'undefined') {
         clearInterval(cd_interval);
     }
 
+    cd_duration = cd_sections[sec_idx].duration;
     cd_target_time = new Date().getTime() + cd_duration;
     cd_interval = setInterval(() => {
         let time_left = cd_target_time - new Date().getTime();
@@ -58,27 +72,61 @@ function startCountdown() {
             cent.toString().padStart(2, '0');
 
         // Update section
-        let time_elapsed = cd_duration - time_left;
-        let section = cd_sections[sec_idx];
-        if (section.start <= time_elapsed) {
-            section.audio.play();
+        if (seq_idx < cd_sections[sec_idx].seq.length) {
 
-            let desc = document.querySelector("#countdown-section-desc");
-            desc.innerHTML = section.description;
-            
-            let bg = document.querySelectorAll(".countdown-bg-colour");
-            bg.forEach((e) => {
-                e.style.backgroundColor = section.bg_colour;
-            });
-            
-            sec_idx++;
+            let time_elapsed = cd_duration - time_left;
+            let seq = cd_sections[sec_idx].seq[seq_idx];
+            let start = seq.start;
+            start = start < 0 ? cd_sections[sec_idx].duration + start : start;
+
+            if (start <= time_elapsed) {
+                cd_audio.pause();
+                cd_audio.currentTime = 0;
+                cd_audio = seq.audio;
+                cd_audio.play();
+    
+                let desc = document.querySelector("#countdown-section-desc");
+                desc.innerHTML = seq.description;
+                
+                let bg = document.querySelectorAll(".bg-colour");
+                bg.forEach((e) => {
+                    e.style.backgroundColor = seq.bg_colour;
+                });
+    
+                let fg = document.querySelectorAll(".fg-colour");
+                fg.forEach((e) => {
+                    e.style.color = seq.fg_colour;
+                });
+                
+                seq_idx++;
+            }
         }
 
         if (time_left <= 0) {
-            cd_sections[sec_idx-1].audio.pause();
-            clearInterval(cd_interval);
+            seq_idx = 0;
+            sec_idx++;
+            
+            if (sec_idx >= cd_sections.length) {
+                stopCountdown();
+                return;
+            }
+
+            cd_audio.pause();
+            cd_audio.currentTime = 0;
+            
+            cd_duration = cd_sections[sec_idx].duration;
+            cd_target_time = new Date().getTime() + cd_duration;
         }
     }, 9);
+}
+
+function stopCountdown() {
+    start_button.disabled = false;
+    stop_button.disabled = true;
+
+    cd_audio.pause();
+    cd_audio.currentTime = 0;
+    clearInterval(cd_interval);
 }
 
 function playAudio() {

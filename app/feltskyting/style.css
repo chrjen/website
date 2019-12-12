@@ -1,9 +1,15 @@
-body, button {
+body, button, input {
     font-family: 'Titillium Web', sans-serif;
+    font-size: 3vw;
+}
+
+input[type='checkbox'] {
+    margin: 0px;
+    width: 6vw;
+    height: 6vw;
 }
 
 body {
-    font-size: 2.1vw;
     display: grid;
     gap: 3vh;
     margin: 0px;
@@ -41,7 +47,6 @@ h1 {
 }
 
 .action-button {
-    font-size: 3vw;
     width: 60%
 }
 
@@ -50,4 +55,6 @@ h1 {
     grid-template-columns: 1fr 1fr;
     margin-left: auto;
     margin-right: auto;
+    align-items: center;
+    row-gap: 1vw;
 }

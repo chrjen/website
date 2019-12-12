@@ -49,13 +49,13 @@ function startCountdown() {
         time_left = time_left < 0 ? 0 : time_left;
         let min = Math.floor((time_left / (60 * 1000)) % 60);
         let sec = Math.floor((time_left / 1000) % 60)
-        let mil = Math.floor(time_left % 100)
+        let cent = Math.floor((time_left / 10) % 100)
         
         let cd_div = document.querySelector("#countdown-timer");
         cd_div.innerHTML =
             min.toString().padStart(2, '0') + ':' +
             sec.toString().padStart(2, '0') + '.' +
-            mil.toString().padStart(2, '0');
+            cent.toString().padStart(2, '0');
 
         // Update section
         let time_elapsed = cd_duration - time_left;

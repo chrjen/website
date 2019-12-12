@@ -1,4 +1,42 @@
+body {
+    font-family: 'Titillium Web', sans-serif;
+    display: grid;
+    gap: 3vh;
+    margin: 0px;
+}
+
+h1 {
+    font-size: 7vw;
+    font-weight: 700;
+    padding-left: 1em;
+}
+
 #countdown-timer {
     font-family: 'Courier Prime', monospace;
-    font-size: 4rem;
+    font-size: 18vw;
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    width: 100vw;
+}
+
+#countdown-section-desc {
+    font-size: 4vw;
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+}
+
+#button-container {
+    display: grid;
+    padding: 0 10vw 0 10vw;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    justify-items: center;
+    height: 150%;
+}
+
+.action-button {
+    font-size: 3vw;
+    width: 60%
 }

@@ -75,6 +75,7 @@ function startCountdown() {
         }
 
         if (time_left <= 0) {
+            cd_sections[sec_idx-1].audio.pause();
             clearInterval(cd_interval);
         }
     }, 9);

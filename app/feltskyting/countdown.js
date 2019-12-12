@@ -41,6 +41,8 @@ cd_sections = [
 window.onload = function(){
     start_button = document.querySelector("#button-start-countdown");
     stop_button = document.querySelector("#button-stop-countdown");
+    seconds_setting = document.querySelector("#countdown-duration");
+    pre_count_setting = document.querySelector("#countdown-skip");
     start_button.onclick = startCountdown;
     stop_button.onclick = stopCountdown;
 }
@@ -54,6 +56,12 @@ function startCountdown() {
 
     if (typeof cd_interval !== 'undefined') {
         clearInterval(cd_interval);
+    }
+
+    // Use settings values to make changes.
+    cd_sections[1].duration =  seconds_setting.value * 1000;
+    if (!pre_count_setting.checked) {
+        sec_idx = 1;
     }
 
     cd_duration = cd_sections[sec_idx].duration;

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Christer Jensen">
+
+        <title>Feltskytingsnedteller</title>
+
+        <script src="countdown.js"></script>
+        <link rel="stylesheet" href="style.css">
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Courier+Prime:400i&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Titillium+Web:400,700&display=swap" rel="stylesheet">
+    </head>
+    <body class="bg-colour fg-colour">
+        <h1>Feltskytingsnedteller</h1>
+        <div id="countdown-timer">
+            00:00.00
+        </div>
+        <div id="countdown-section-desc">
+        </div>
+        <div class="settings">
+            Forberedelsestid <input id="countdown-skip" type="checkbox" checked>
+            Sekunder nedtelling <input id="countdown-duration" type="number" min="0" value="20">
+        </div>
+        <div id="button-container">
+            <button class="action-button" id="button-start-countdown">Start</button>
+            <button class="action-button" id="button-stop-countdown" disabled>Stopp</button>
+        </div>
+    </body>
+</html>

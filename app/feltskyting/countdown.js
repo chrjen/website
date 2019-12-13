@@ -4,6 +4,18 @@ cd_sections = [
         duration: 10_000,
         seq: [
             {
+                description: "Klargjør våpnene",
+                start: 0,
+                fg_colour: "#000000",
+                bg_colour: "#ffffff",
+                audio: new Audio(),
+            }
+        ]
+    },
+    {
+        duration: 10_000,
+        seq: [
+            {
                 description: "Er skytterene klare?",
                 start: 0,
                 fg_colour: "#ffffff",
@@ -59,7 +71,7 @@ function startCountdown() {
     }
 
     // Use settings values to make changes.
-    cd_sections[1].duration =  seconds_setting.value * 1000;
+    cd_sections[2].duration =  seconds_setting.value * 1000;
     if (!pre_count_setting.checked) {
         sec_idx = 1;
     }

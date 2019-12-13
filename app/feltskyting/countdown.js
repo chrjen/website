@@ -20,7 +20,7 @@ cd_sections = [
                 start: 0,
                 fg_colour: "#ffffff",
                 bg_colour: "#044910",
-                audio: new Audio("audio/start.wav"),
+                audio: new Audio("audio/klar.wav"),
             }, {
                 description: "KLAR",
                 start: 5000,

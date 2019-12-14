@@ -88,7 +88,7 @@ function startCountdown() {
         let cd_div = document.querySelector("#countdown-timer");
         cd_div.innerHTML =
             min.toString().padStart(2, '0') + ':' +
-            sec.toString().padStart(2, '0') + '.' +
+            sec.toString().padStart(2, '0') + ',' +
             cent.toString().padStart(2, '0');
 
         // Update section

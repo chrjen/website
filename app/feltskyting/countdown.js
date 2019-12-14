@@ -81,7 +81,7 @@ function startCountdown() {
     cd_interval = setInterval(() => {
         let time_left = cd_target_time - new Date().getTime();
         time_left = time_left < 0 ? 0 : time_left;
-        let min = Math.floor((time_left / (60 * 1000)) % 60);
+        let min = Math.floor((time_left / (60 * 1000)));
         let sec = Math.floor((time_left / 1000) % 60)
         let cent = Math.floor((time_left / 10) % 100)
         

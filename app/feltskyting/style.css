@@ -1,37 +1,34 @@
 body, button, input {
     font-family: 'Titillium Web', sans-serif;
-    font-size: 3vw;
+    font-size: 3vmin;
 }
 
 input[type='checkbox'] {
     margin: 0px;
-    width: 6vw;
-    height: 6vw;
+    width: 6vmin;
+    height: 6vmin;
 }
 
 body {
     display: grid;
-    gap: 3vh;
+    gap: 3vmax;
     margin: 0px;
 }
 
 h1 {
-    font-size: 7vw;
+    font-size: 7vmin;
     font-weight: 700;
     padding-left: 1em;
 }
 
 #countdown-timer {
     font-family: 'Courier Prime', monospace;
-    font-size: 18vw;
-    display: grid;
-    justify-content: center;
-    justify-items: center;
-    width: 100vw;
+    font-size: 18vmin;
+    text-align: center;
 }
 
 #countdown-section-desc {
-    font-size: 4vw;
+    font-size: 4vmin;
     display: grid;
     justify-content: center;
     justify-items: center;
@@ -39,7 +36,7 @@ h1 {
 
 #button-container {
     display: grid;
-    padding: 0 10vw 0 10vw;
+    padding: 0 10vmin 0 10vmin;
     grid-template-columns: 1fr 1fr;
     justify-content: center;
     justify-items: center;
@@ -56,5 +53,5 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     align-items: center;
-    row-gap: 1vw;
+    row-gap: 1vmin;
 }

@@ -1,7 +1,7 @@
 cd_audio = new Audio();
 cd_sections = [
     {
-        duration: 10_000,
+        duration: 10000,
         seq: [
             {
                 description: "Klargjør våpnene",
@@ -13,7 +13,7 @@ cd_sections = [
         ]
     },
     {
-        duration: 10_000,
+        duration: 10000,
         seq: [
             {
                 description: "Er skytterene klare?",
@@ -31,7 +31,7 @@ cd_sections = [
         ],
     },
     {
-        duration: 15_000,
+        duration: 15000,
         seq: [
             {
                 description: "ILD",

@@ -82,11 +82,15 @@ function draw() {
     cylinder_shader.setUniform("tex0", wheel_tex);
     shader(cylinder_shader);
     
-    cylinder(wheel_r, wheel_h, wheel_quality, 2);
+    cylinder(wheel_r, wheel_h, wheel_quality, 1);
 
     // Revert to default shader
     resetShader();
 
+    fill(0);
+    cylinder(wheel_r * 0.33, wheel_h * 1.1, 24, 1);
+    
+    fill(255);
     for (let i = 0; i < names.length; i++) {
         push();
             translate(0, 0, wheel_r*1.005);

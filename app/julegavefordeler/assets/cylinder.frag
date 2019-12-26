@@ -28,5 +28,5 @@ void main (void) {
         v = 1.0 - sqrt(vPosition.x*vPosition.x + vPosition.z*vPosition.z) / 4.0;
     }
 
-    gl_FragColor = texture2D(tex0, vec2(u, v));
+    gl_FragColor = texture2D(tex0, vec2(v, u));
 }

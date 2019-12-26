@@ -21,14 +21,15 @@ function preload() {
 
 let font_size = 16;
 let wheel_tex;
-let wheel_tex_w = 256;
-let wheel_tex_h = 2048;
+let wheel_tex_w = 64;
+let wheel_tex_h = 128;
 
 let colours_tex;
 let colours = [
-    0xff, 0xff, 0xff, 0xff, // #ffffff
-    0x30, 0xa0, 0x65, 0xff, // #30a065
-    0xc0, 0x34, 0x15, 0xff, // #c03415
+    [0xff, 0xff, 0xff, 0xff], // #ffffff
+    [0x30, 0xa0, 0x65, 0xff], // #30a065
+    [0xc0, 0x34, 0x15, 0xff], // #c03415
+    [0xdb, 0xb1, 0x3b, 0xff], // #dbb13b
 ];
 
 function setup() {
@@ -47,24 +48,20 @@ function setup() {
     }
     colours_tex.updatePixels();
 
+    colours_tex.glMinFilter = NEAREST
+
     // Create the wheel background texture.
-    wheel_tex.stroke(0);
-    wheel_tex.background(1);
-    wheel_tex.fill(2);
-    wheel_tex.strokeWeight(wheel_stroke);
+    wheel_tex.stroke(255);
+    wheel_tex.background(255);
+    wheel_tex.noStroke();
     for (let i = 0; i < names.length; i++) {
-        if (i % 2 === 0) continue;
+        wheel_tex.fill(colours[i % 3 + 1]);
         wheel_tex.rect(
-            -wheel_stroke,
+            0,
             wheel_tex_h / names.length * i,
-            wheel_tex_w + 2 * wheel_stroke,
+            wheel_tex_w,
             wheel_tex_h / names.length);
     }
-    wheel_tex.line(0, 0, wheel_tex_w, 0);
-    wheel_tex.line(0, wheel_tex_h, wheel_tex_w, wheel_tex_h);
-    wheel_tex.strokeWeight(wheel_stroke);
-    wheel_tex.line(wheel_tex_w * 0.25, 0, wheel_tex_w * 0.25, wheel_tex_h);
-    wheel_tex.line(wheel_tex_w * 0.75, 0, wheel_tex_w * 0.75, wheel_tex_h);
 }
 
 let wheel_r = 50;
@@ -72,20 +69,18 @@ let wheel_h = 50;
 let wheel_quality = 62;
 let wheel_stroke = wheel_tex_h * 0.005;
 
+let rim_r = 5;
+
 let rot = 0.00;
 let rot_v = 0.00;
 
 function draw() {
     orbitControl();
 
-    // translate(-512, -512, -1000);
-    // image(wheel_tex, 0, 0, 1024);
-    // return;
-
     // #1390c0
     background(0x13, 0x90, 0xc0, 0xff);
     
-    translate(-(wheel_h + 5) + wheel_h/2, 0, 805);
+    translate(-(wheel_h + 8) + wheel_h/2, 0, 805);
     rotateX(rot);
     rot_v *= 0.98;
     rot += rot_v;
@@ -102,9 +97,33 @@ function draw() {
     // Revert to default shader
     resetShader();
 
+    // Axle
     fill(0);
+    noStroke();
     cylinder(wheel_r * 0.33, wheel_h * 1.1, 24, 1);
     
+    // Rim
+    fill(0x6e, 0x55, 0x3d) // ##6e553d
+    push();
+        rotateX(TAU/4);
+        translate(0, 0, wheel_h / 2);
+        torus(wheel_r, 2, wheel_quality, rim_r);
+        translate(0, 0, -wheel_h);
+        torus(wheel_r, 2, wheel_quality, rim_r);
+    pop();
+
+    // Dividers
+    fill(255);
+    for (let i = 0; i < names.length; i++) {
+        push();
+            rotateY(TAU / names.length * 0.5);
+            translate(0, 0, wheel_r);
+            rotateZ(-TAU / 4);
+            box(wheel_h * 0.92, 2, 1);
+        pop();
+        rotateY(TAU / names.length);
+    }
+
     fill(255);
     for (let i = 0; i < names.length; i++) {
         push();
@@ -126,13 +145,29 @@ function windowResized() {
     perspective(PI / 4.0, width / height, 0.1, 2000);
 }
 
+function spinWheel() {
+    rot_v = 1.8;
+}
+
+function stopWheel() {
+    rot_v = 0;
+}
+
 const PAGE_DOWN = 34;
 const PAGE_UP = 33;
 
 function keyPressed() {
     if (keyCode === PAGE_DOWN) {
-        rot_v = 1.8;
+        spinWheel()
     } else if (keyCode === PAGE_UP) {
-        rot_v = 0;
+        stopWheel()
+    }
+}
+
+function mouseClicked() {
+    if (mouseX < width * 0.25) {
+        spinWheel();
+    } else if (mouseX > width * 0.75) {
+        stopWheel();
     }
 }

@@ -112,6 +112,20 @@ function draw() {
         torus(wheel_r, 2, wheel_quality, rim_r);
     pop();
 
+    // Pegs
+    fill(50);
+    for (let i = 0; i < names.length; i++) {
+        push();
+            rotateY(TAU / names.length * 0.5);
+            translate(0, (wheel_h - rim_r) / 2, wheel_r);
+            rotateZ(-TAU / 4);
+            box(1, 1, 6);
+        translate(wheel_h - rim_r, 0, 0);
+            box(1, 1, 6);
+        pop();
+        rotateY(TAU / names.length);
+    }
+
     // Dividers
     fill(255);
     for (let i = 0; i < names.length; i++) {

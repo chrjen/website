@@ -12,6 +12,7 @@ varying vec2 vColor;
 
 // Uniforms
 uniform sampler2D tex0;
+uniform sampler2D colours;
 
 
 void main (void) {
@@ -28,5 +29,12 @@ void main (void) {
         v = 1.0 - sqrt(vPosition.x*vPosition.x + vPosition.z*vPosition.z) / 4.0;
     }
 
-    gl_FragColor = texture2D(tex0, vec2(v, u));
+    float colourIdx = floor(texture2D(tex0, vec2(v, u)).r * 256.0) + 0.5;
+    vec4 colour = texture2D(colours, vec2(colourIdx/256.0, 0.5));
+    
+    float r = 0.0;
+    if (floor(texture2D(tex0, vec2(v, u)).r * 256.0 + 0.5) > 0.0) {
+        r = 1.0;
+    }
+    gl_FragColor = colour;
 }

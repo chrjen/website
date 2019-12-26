@@ -24,6 +24,13 @@ let wheel_tex;
 let wheel_tex_w = 256;
 let wheel_tex_h = 2048;
 
+let colours_tex;
+let colours = [
+    0xff, 0xff, 0xff, 0xff, // #ffffff
+    0x30, 0xa0, 0x65, 0xff, // #30a065
+    0xc0, 0x34, 0x15, 0xff, // #c03415
+];
+
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     wheel_tex = createGraphics(wheel_tex_w, wheel_tex_h);
@@ -33,10 +40,17 @@ function setup() {
     textSize(font_size);
     perspective(PI / 4.0, width / height, 0.01, 5000);
 
+    colours_tex = createImage(256, 1);
+    colours_tex.loadPixels();
+    for (let i = 0; i < colours.length; i++) {
+        colours_tex.pixels[i] = colours[i];
+    }
+    colours_tex.updatePixels();
+
     // Create the wheel background texture.
-    wheel_tex.background(0x30, 0xa0, 0x65); // #30a065
-    wheel_tex.fill(0xc0, 0x34, 0x15); // #c03415
-    wheel_tex.stroke(255);
+    wheel_tex.stroke(0);
+    wheel_tex.background(1);
+    wheel_tex.fill(2);
     wheel_tex.strokeWeight(wheel_stroke);
     for (let i = 0; i < names.length; i++) {
         if (i % 2 === 0) continue;
@@ -80,6 +94,7 @@ function draw() {
     smooth();
     // Set-up shader
     cylinder_shader.setUniform("tex0", wheel_tex);
+    cylinder_shader.setUniform("colours", colours_tex);
     shader(cylinder_shader);
     
     cylinder(wheel_r, wheel_h, wheel_quality, 1);

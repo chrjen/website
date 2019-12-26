@@ -24,7 +24,6 @@ let wheel_tex;
 let wheel_tex_w = 64;
 let wheel_tex_h = 128;
 
-let colours_tex;
 let colours = [
     [0xff, 0xff, 0xff, 0xff], // #ffffff
     [0x30, 0xa0, 0x65, 0xff], // #30a065
@@ -40,15 +39,6 @@ function setup() {
     textAlign(CENTER, CENTER);
     textSize(font_size);
     perspective(PI / 4.0, width / height, 0.01, 5000);
-
-    colours_tex = createImage(256, 1);
-    colours_tex.loadPixels();
-    for (let i = 0; i < colours.length; i++) {
-        colours_tex.pixels[i] = colours[i];
-    }
-    colours_tex.updatePixels();
-
-    colours_tex.glMinFilter = NEAREST
 
     // Create the wheel background texture.
     wheel_tex.stroke(255);
@@ -80,6 +70,7 @@ function draw() {
     // #1390c0
     background(0x13, 0x90, 0xc0, 0xff);
     
+    
     translate(-(wheel_h + 8) + wheel_h/2, 0, 805);
     rotateX(rot);
     rot_v *= 0.98;
@@ -89,13 +80,16 @@ function draw() {
     smooth();
     // Set-up shader
     cylinder_shader.setUniform("tex0", wheel_tex);
-    cylinder_shader.setUniform("colours", colours_tex);
     shader(cylinder_shader);
     
     cylinder(wheel_r, wheel_h, wheel_quality, 1);
-
+    
     // Revert to default shader
     resetShader();
+    
+    // Default lighting and material.
+    ambientLight(50, 50, 50);
+    directionalLight(255, 255, 255, -0.25, 0.25, -1);
 
     // Axle
     fill(0);
@@ -103,7 +97,7 @@ function draw() {
     cylinder(wheel_r * 0.33, wheel_h * 1.1, 24, 1);
     
     // Rim
-    fill(0x6e, 0x55, 0x3d) // ##6e553d
+    ambientMaterial(0x6e, 0x55, 0x3d) // ##6e553d
     push();
         rotateX(TAU/4);
         translate(0, 0, wheel_h / 2);
@@ -113,31 +107,33 @@ function draw() {
     pop();
 
     // Pegs
+    specularMaterial(255);
+    shininess(8);
     fill(50);
     for (let i = 0; i < names.length; i++) {
         push();
-            rotateY(TAU / names.length * 0.5);
-            translate(0, (wheel_h - rim_r) / 2, wheel_r);
-            rotateZ(-TAU / 4);
-            box(1, 1, 6);
+        rotateY(TAU / names.length * 0.5);
+        translate(0, (wheel_h - rim_r) / 2, wheel_r);
+        rotateZ(-TAU / 4);
+        box(1, 1, 6);
         translate(wheel_h - rim_r, 0, 0);
-            box(1, 1, 6);
+        box(1, 1, 6);
         pop();
         rotateY(TAU / names.length);
     }
-
+    
     // Dividers
     fill(255);
     for (let i = 0; i < names.length; i++) {
         push();
-            rotateY(TAU / names.length * 0.5);
-            translate(0, 0, wheel_r);
-            rotateZ(-TAU / 4);
-            box(wheel_h * 0.92, 2, 1);
+        rotateY(TAU / names.length * 0.5);
+        translate(0, 0, wheel_r);
+        rotateZ(-TAU / 4);
+        box(wheel_h * 0.92, 2, 1);
         pop();
         rotateY(TAU / names.length);
     }
-
+    
     fill(255);
     for (let i = 0; i < names.length; i++) {
         push();

@@ -19,16 +19,18 @@ function preload() {
     font_spirax = loadFont("assets/fonts/Spirax/Spirax-Regular.ttf");
 }
 
+let font_size = 16;
+
 function setup() {
     createCanvas(1920, 1080, WEBGL);
 
     textFont(font_girassol);
     textAlign(CENTER, CENTER);
-    textStyle(72);
+    textSize(font_size);
     perspective(PI / 4.0, width / height, 0.1, 5000);
 }
 
-let wheel_r = 60;
+let wheel_r = 50;
 let wheel_h = 50;
 let wheel_quality = 62;
 
@@ -41,7 +43,7 @@ function draw() {
     // #1390c0
     background(0x13, 0x90, 0xc0, 0xff);
     
-    translate(-(wheel_h + 5) + wheel_h/2, 0, 800);
+    translate(-(wheel_h + 5) + wheel_h/2, 0, 810);
     rotateX(rot);
     rot_v *= 0.999;
     rot += rot_v;
@@ -60,6 +62,11 @@ function draw() {
         push();
             translate(0, 0, wheel_r*1.005);
             rotateZ(-TAU/4);
+            let size = font_size;
+            while (textWidth(names[i]) > wheel_h) {
+                textSize(size);
+                size--;
+            }
             text(names[i], 0, 0);
         pop();
         rotateY(TAU / names.length);

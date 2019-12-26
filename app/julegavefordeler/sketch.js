@@ -59,7 +59,7 @@ let wheel_quality = 62;
 let wheel_stroke = wheel_tex_h * 0.005;
 
 let rot = 0.00;
-let rot_v = -0.02;
+let rot_v = 0.00;
 
 function draw() {
     orbitControl();
@@ -73,7 +73,7 @@ function draw() {
     
     translate(-(wheel_h + 5) + wheel_h/2, 0, 810);
     rotateX(rot);
-    rot_v *= 0.999;
+    rot_v *= 0.98;
     rot += rot_v;
     rotateZ(TAU/4);
     
@@ -99,5 +99,16 @@ function draw() {
             text(names[i], 0, 0);
         pop();
         rotateY(TAU / names.length);
+    }
+}
+
+const PAGE_DOWN = 34;
+const PAGE_UP = 33;
+
+function keyPressed() {
+    if (keyCode === PAGE_DOWN) {
+        rot_v = 1.8;
+    } else if (keyCode === PAGE_UP) {
+        rot_v = 0;
     }
 }

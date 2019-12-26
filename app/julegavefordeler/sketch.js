@@ -25,13 +25,13 @@ let wheel_tex_w = 256;
 let wheel_tex_h = 2048;
 
 function setup() {
-    createCanvas(1920, 1080, WEBGL);
+    createCanvas(windowWidth, windowHeight, WEBGL);
     wheel_tex = createGraphics(wheel_tex_w, wheel_tex_h);
 
     textFont(font_girassol);
     textAlign(CENTER, CENTER);
     textSize(font_size);
-    perspective(PI / 4.0, width / height, 0.1, 5000);
+    perspective(PI / 4.0, width / height, 0.01, 5000);
 
     // Create the wheel background texture.
     wheel_tex.background(0x30, 0xa0, 0x65); // #30a065
@@ -71,7 +71,7 @@ function draw() {
     // #1390c0
     background(0x13, 0x90, 0xc0, 0xff);
     
-    translate(-(wheel_h + 5) + wheel_h/2, 0, 810);
+    translate(-(wheel_h + 5) + wheel_h/2, 0, 805);
     rotateX(rot);
     rot_v *= 0.98;
     rot += rot_v;
@@ -104,6 +104,11 @@ function draw() {
         pop();
         rotateY(TAU / names.length);
     }
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+    perspective(PI / 4.0, width / height, 0.1, 2000);
 }
 
 const PAGE_DOWN = 34;

@@ -21,8 +21,8 @@ function preload() {
 
 let font_size = 16;
 let wheel_tex;
-let wheel_tex_w = 64;
-let wheel_tex_h = 128;
+let wheel_tex_w = 1;
+let wheel_tex_h = 256;
 
 let colours = [
     [0xff, 0xff, 0xff, 0xff], // #ffffff
@@ -59,7 +59,8 @@ let wheel_h = 50;
 let wheel_quality = 62;
 let wheel_stroke = wheel_tex_h * 0.005;
 
-let rim_r = 5;
+let rim_r = 2;
+let rim_quality = 10;
 
 let rot = 0.00;
 let rot_v = 0.00;
@@ -101,9 +102,9 @@ function draw() {
     push();
         rotateX(TAU/4);
         translate(0, 0, wheel_h / 2);
-        torus(wheel_r, 2, wheel_quality, rim_r);
+        torus(wheel_r, rim_r, wheel_quality, rim_quality);
         translate(0, 0, -wheel_h);
-        torus(wheel_r, 2, wheel_quality, rim_r);
+        torus(wheel_r, rim_r, wheel_quality, rim_quality);
     pop();
 
     // Pegs
@@ -113,10 +114,10 @@ function draw() {
     for (let i = 0; i < names.length; i++) {
         push();
         rotateY(TAU / names.length * 0.5);
-        translate(0, (wheel_h - rim_r) / 2, wheel_r);
+        translate(0, (wheel_h - 3*rim_r) / 2, wheel_r);
         rotateZ(-TAU / 4);
         box(1, 1, 6);
-        translate(wheel_h - rim_r, 0, 0);
+        translate(wheel_h - 3*rim_r, 0, 0);
         box(1, 1, 6);
         pop();
         rotateY(TAU / names.length);

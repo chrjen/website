@@ -73,6 +73,8 @@ function draw() {
     
     
     translate(-(wheel_h + 8) + wheel_h/2, 0, 805);
+    
+    push();
     rotateX(rot);
     rot_v *= 0.98;
     rot += rot_v;
@@ -111,16 +113,17 @@ function draw() {
     specularMaterial(255);
     shininess(8);
     fill(50);
-    for (let i = 0; i < names.length; i++) {
+    let n_pegs = names.length * 3;
+    for (let i = 0; i < n_pegs; i++) {
         push();
-        rotateY(TAU / names.length * 0.5);
+        rotateY(TAU / n_pegs * 0.5);
         translate(0, (wheel_h - 3*rim_r) / 2, wheel_r);
         rotateZ(-TAU / 4);
         box(1, 1, 6);
         translate(wheel_h - 3*rim_r, 0, 0);
         box(1, 1, 6);
         pop();
-        rotateY(TAU / names.length);
+        rotateY(TAU / n_pegs);
     }
     
     // Dividers
@@ -135,6 +138,7 @@ function draw() {
         rotateY(TAU / names.length);
     }
     
+    // Names
     fill(255);
     for (let i = 0; i < names.length; i++) {
         push();
@@ -149,6 +153,21 @@ function draw() {
         pop();
         rotateY(TAU / names.length);
     }
+    pop();
+
+    // Arrow
+    ambientLight(50, 50, 50);
+    directionalLight(255, 255, 255, -0.25, 0.25, -1);
+
+    ambientMaterial(255);
+    fill(0x9f, 0xba, 0x2f); // #9fba2f
+    noStroke();
+    rotateZ(-TAU / 4);
+    translate(0, wheel_h / 2 + 2, wheel_r + rim_r);
+    rotateZ((rot + (PI / n_pegs)) % (TAU / n_pegs));
+    scale(0.5, 1);
+    rotateX(TAU / 4);
+    cylinder(7, 1, 3);
 }
 
 function windowResized() {

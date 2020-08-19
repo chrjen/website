@@ -7,7 +7,14 @@ let names = [
     "Frank",
     "George",
     "Hendricks",
-    "Ivy"
+    "Ivy",
+    "Jack",
+    "Kenneth",
+    "Lewis",
+    "Martha",
+    "Ned",
+    "Olaphson",
+    //"Peter-Christopher",
 ];
 
 function preload() {
@@ -29,6 +36,7 @@ let colours = [
     [0x30, 0xa0, 0x65, 0xff], // #30a065
     [0xc0, 0x34, 0x15, 0xff], // #c03415
     [0xdb, 0xb1, 0x3b, 0xff], // #dbb13b
+    [0x7b, 0xb1, 0xbb, 0xff], // #7bb1bb
 ];
 
 function setup() {
@@ -45,7 +53,7 @@ function setup() {
     wheel_tex.background(255);
     wheel_tex.noStroke();
     for (let i = 0; i < names.length; i++) {
-        wheel_tex.fill(colours[i % 3 + 1]);
+        wheel_tex.fill(colours[i % 4 + 1]);
         wheel_tex.rect(
             0,
             wheel_tex_h / names.length * i,

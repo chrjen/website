@@ -7,7 +7,33 @@ function input() {
     let ast = parser.parse();
     console.log("Parser output:", ast);
     console.log("Eval output:", ast.eval());
+    let resultDiv = document.createElement("div");
+    resultDiv.classList.add("result");
+    let inputDiv = document.createElement("div");
+    inputDiv.innerText = str;
+    let outputDiv = document.createElement("div");
+    outputDiv.innerText = 漢数字形式変換(ast.eval());
+    let resultsDiv = document.querySelector("#results");
+    resultDiv.append(inputDiv);
+    resultDiv.append(outputDiv);
+    resultsDiv.prepend(resultDiv);
 }
+const 零 = 0;
+const 一 = 1;
+const 二 = 2;
+const 三 = 3;
+const 四 = 4;
+const 五 = 5;
+const 六 = 6;
+const 七 = 7;
+const 八 = 8;
+const 九 = 9;
+const 十 = 10;
+const 百 = 100;
+const 千 = 1000;
+const 万 = 10000;
+const 億 = 100000000;
+const 兆 = 1000000000000;
 const kanjiDigits = "零一二三四五六七八九";
 function kanjiToNumber(str) {
     let n = 0;
@@ -49,6 +75,59 @@ function kanjiToNumber(str) {
     }
     n += kanjiDigits.indexOf(str);
     return n >= 0 ? n : undefined;
+}
+function 漢数字形式変換(数) {
+    let 文字列 = "";
+    if (数 == 零) {
+        return '零';
+    }
+    if (数 < 零) {
+        文字列 += '-';
+        数 = -数;
+    }
+    let 何兆 = Math.floor(数 / 兆);
+    if (何兆 > 零) {
+        文字列 += 漢数字形式変換(何兆) + '兆';
+    }
+    数 -= 兆 * 何兆;
+    let 何億 = Math.floor(数 / 億);
+    if (何億 > 零) {
+        文字列 += 漢数字形式変換(何億) + '億';
+    }
+    数 -= 億 * 何億;
+    let 何万 = Math.floor(数 / 万);
+    if (何万 > 零) {
+        文字列 += 漢数字形式変換(何万) + '万';
+    }
+    数 -= 万 * 何万;
+    let 何千 = Math.floor(数 / 千);
+    if (何千 > 一) {
+        文字列 += 漢数字形式変換(何千) + '千';
+    }
+    else if (何千 == 一) {
+        文字列 += '千';
+    }
+    数 -= 千 * 何千;
+    let 何百 = Math.floor(数 / 百);
+    if (何百 > 一) {
+        文字列 += 漢数字形式変換(何百) + '百';
+    }
+    else if (何百 == 一) {
+        文字列 += '百';
+    }
+    数 -= 百 * 何百;
+    let 何十 = Math.floor(数 / 十);
+    if (何十 > 一) {
+        文字列 += 漢数字形式変換(何十) + '十';
+    }
+    else if (何十 == 一) {
+        文字列 += '十';
+    }
+    数 -= 十 * 何十;
+    if (数 > 零) {
+        文字列 += kanjiDigits[数];
+    }
+    return 文字列;
 }
 /* ===== TOKENISER ===== */
 var TokenType;

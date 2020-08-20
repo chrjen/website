@@ -13,10 +13,19 @@ function input() {
 
     let resultDiv = document.createElement("div");
     resultDiv.classList.add("result");
+    
     let inputDiv = document.createElement("div");
-    inputDiv.innerText = str;
+    console.log("ast", ast);
+    if (typeof (ast as unknown as HtmlObj).html === 'function') {
+        let list = (ast as unknown as HtmlObj).html([])
+        list.forEach((elem) => {
+            inputDiv.append(elem);
+        });
+    }
+    
     let outputDiv = document.createElement("div");
     outputDiv.innerText = 漢数字形式変換(ast.eval());
+    
 
     let resultsDiv = (<HTMLDivElement>document.querySelector("#results"));
     resultDiv.append(inputDiv);
@@ -258,13 +267,17 @@ interface EvalNumber {
     eval(): number | undefined;
 }
 
+interface HtmlObj {
+    html(list: HTMLElement[]): HTMLElement[];
+}
+
 enum BinOp {
     PLUS,
     MINUS,
     MULTIPLY,
     DIVIDE,
 }
-class NodeBinOp implements EvalNumber {
+class NodeBinOp implements EvalNumber, HtmlObj {
     left: EvalNumber;
     right: EvalNumber;
     op: BinOp;
@@ -289,13 +302,45 @@ class NodeBinOp implements EvalNumber {
                 return leftValue / rightValue;
         }
     }
+
+    html(list: HTMLElement[]): HTMLElement[] {
+
+        if (typeof (this.left as unknown as HtmlObj).html === 'function') {
+            (this.left as unknown as HtmlObj).html(list);
+        }
+
+        let span = document.createElement("span");
+        span.classList.add("op");
+        span.classList.add("bin-op");
+        switch (this.op) {
+            case BinOp.PLUS:
+                span.innerHTML = "＋";
+                break;
+            case BinOp.MINUS:
+                span.innerHTML = "ー";
+                break;
+            case BinOp.MULTIPLY:
+                span.innerHTML = "＊";
+                break;
+            case BinOp.DIVIDE:
+                span.innerHTML = "／";
+                break;
+        }
+        list.push(span);
+
+        if (typeof (this.right as unknown as HtmlObj).html === 'function') {
+            (this.right as unknown as HtmlObj).html(list);
+        }
+
+        return list;
+    }
 }
 
 enum UniOp {
     POSITIVE,
     NEGATIVE,
 }
-class NodeUniOp implements EvalNumber {
+class NodeUniOp implements EvalNumber, HtmlObj {
     right: EvalNumber;
     op: UniOp;
 
@@ -313,9 +358,31 @@ class NodeUniOp implements EvalNumber {
                 return -rightValue;
         }
     }
+
+    html(list: HTMLElement[]): HTMLElement[] {
+
+        let span = document.createElement("span");
+        span.classList.add("op");
+        span.classList.add("uni-op");
+        switch (this.op) {
+            case UniOp.POSITIVE:
+                span.innerHTML = "＋";
+                break;
+            case UniOp.NEGATIVE:
+                span.innerHTML = "ー";
+                break;
+        }
+        list.push(span);
+
+        if (typeof (this.right as unknown as HtmlObj).html === 'function') {
+            (this.right as unknown as HtmlObj).html(list);
+        }
+
+        return list;
+    }
 }
 
-class NodeNumber implements EvalNumber {
+class NodeNumber implements EvalNumber, HtmlObj {
     value: number;
     
     constructor(value: number) {
@@ -324,6 +391,16 @@ class NodeNumber implements EvalNumber {
 
     eval(): number {
         return this.value;
+    }
+
+    html(list: HTMLElement[]): HTMLElement[] {
+
+        let span = document.createElement("span");
+        span.classList.add("number");
+        span.innerText = 漢数字形式変換(this.value);
+        list.push(span);
+
+        return list;
     }
 }
 

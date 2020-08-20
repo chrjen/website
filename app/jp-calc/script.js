@@ -10,7 +10,13 @@ function input() {
     let resultDiv = document.createElement("div");
     resultDiv.classList.add("result");
     let inputDiv = document.createElement("div");
-    inputDiv.innerText = str;
+    console.log("ast", ast);
+    if (typeof ast.html === 'function') {
+        let list = ast.html([]);
+        list.forEach((elem) => {
+            inputDiv.append(elem);
+        });
+    }
     let outputDiv = document.createElement("div");
     outputDiv.innerText = 漢数字形式変換(ast.eval());
     let resultsDiv = document.querySelector("#results");
@@ -241,6 +247,33 @@ class NodeBinOp {
                 return leftValue / rightValue;
         }
     }
+    html(list) {
+        if (typeof this.left.html === 'function') {
+            this.left.html(list);
+        }
+        let span = document.createElement("span");
+        span.classList.add("op");
+        span.classList.add("bin-op");
+        switch (this.op) {
+            case BinOp.PLUS:
+                span.innerHTML = "＋";
+                break;
+            case BinOp.MINUS:
+                span.innerHTML = "ー";
+                break;
+            case BinOp.MULTIPLY:
+                span.innerHTML = "＊";
+                break;
+            case BinOp.DIVIDE:
+                span.innerHTML = "／";
+                break;
+        }
+        list.push(span);
+        if (typeof this.right.html === 'function') {
+            this.right.html(list);
+        }
+        return list;
+    }
 }
 var UniOp;
 (function (UniOp) {
@@ -261,6 +294,24 @@ class NodeUniOp {
                 return -rightValue;
         }
     }
+    html(list) {
+        let span = document.createElement("span");
+        span.classList.add("op");
+        span.classList.add("uni-op");
+        switch (this.op) {
+            case UniOp.POSITIVE:
+                span.innerHTML = "＋";
+                break;
+            case UniOp.NEGATIVE:
+                span.innerHTML = "ー";
+                break;
+        }
+        list.push(span);
+        if (typeof this.right.html === 'function') {
+            this.right.html(list);
+        }
+        return list;
+    }
 }
 class NodeNumber {
     constructor(value) {
@@ -268,6 +319,13 @@ class NodeNumber {
     }
     eval() {
         return this.value;
+    }
+    html(list) {
+        let span = document.createElement("span");
+        span.classList.add("number");
+        span.innerText = 漢数字形式変換(this.value);
+        list.push(span);
+        return list;
     }
 }
 /* ===== PARSER ===== */

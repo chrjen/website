@@ -1,0 +1,20 @@
+main {
+    display: grid;
+    justify-items: center;
+}
+
+#results {
+    margin-top: 1.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
+}
+
+#results p {
+    margin: 0.5em;
+    width: fit-content;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    background-color: #dddddd;
+}

@@ -20,7 +20,7 @@ main.vertical {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* padding: 0 2em 0 2em; */
+    padding: 0 2em 0 2em;
 }
 
 #results-container {

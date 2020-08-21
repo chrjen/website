@@ -388,13 +388,24 @@ class Parser {
     }
     factor() {
         let ast = null;
-        if (this.token.type === TokenType.NUMBER) {
-            ast = new NodeNumber(this.token.value);
+        let cur_token = this.token;
+        switch (cur_token.type) {
+            case TokenType.NUMBER:
+                this.next();
+                ast = new NodeNumber(cur_token.value);
+                break;
+            case TokenType.LPAREN:
+                this.next();
+                ast = this.expr();
+                if (this.token.type !== TokenType.RPAREN) {
+                    console.error(`Syntax error: Right bracket expected at (${this.index})`);
+                    return null;
+                }
+                this.next();
+                break;
+            default:
+                break;
         }
-        else {
-            console.error(`Syntax error: Not a number at index (${this.index}).`);
-        }
-        this.next();
         return ast;
     }
 }

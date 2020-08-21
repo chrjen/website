@@ -409,6 +409,14 @@ class Parser {
                 this.next();
                 ast = new NodeNumber(cur_token.value);
                 break;
+            case TokenType.PLUS:
+                this.next();
+                ast = new NodeUniOp(this.factor(), UniOp.POSITIVE);
+                break;
+            case TokenType.MINUS:
+                this.next();
+                ast = new NodeUniOp(this.factor(), UniOp.NEGATIVE);
+                break;
             case TokenType.LPAREN:
                 this.next();
                 ast = this.expr();

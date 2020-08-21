@@ -13,7 +13,7 @@ main {
 
 #results.vertical {
     writing-mode: vertical-rl;
-    /* letter-spacing: 0.25em; */
+    letter-spacing: 0.25em;
 }
 
 #results .result {

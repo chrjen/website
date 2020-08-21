@@ -33,6 +33,16 @@ function input() {
     resultsDiv.prepend(resultDiv);    
 }
 
+function changeTextDir() {
+    let main = (<HTMLElement>document.querySelector("main"));
+    let checkbox = (<HTMLInputElement>document.querySelector("#checkbox-vertical"));
+    if (checkbox.checked) {
+        main.classList.add("vertical");
+    } else {
+        main.classList.remove("vertical");
+    }
+}
+
 const 零 = 0;
 const 一 = 1;
 const 二 = 2;

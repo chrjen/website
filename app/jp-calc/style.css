@@ -13,7 +13,7 @@ main {
 
 #results.vertical {
     writing-mode: vertical-rl;
-    letter-spacing: 0.25em;
+    /* letter-spacing: 0.25em; */
 }
 
 #results .result {
@@ -35,9 +35,9 @@ main {
 }
 
 #results .result div:first-child::before {
-    margin-inline-end: 1.25em;
+    /* margin-inline-end: 0.75em; */
     color: #707070;
-    content: "入力 »";
+    content: "入力 》";
 }
 
 #results .result div:last-child {
@@ -46,7 +46,26 @@ main {
 }
 
 #results .result div:last-child::before {
-    margin-inline-end: 1.25em;
+    /* margin-inline-end: 0.75em; */
     color: #aaaaaa;
-    content: "出力 »";
+    content: "出力 》";
+}
+
+.result .number {
+    font-weight: 400;
+}
+
+span {
+    display: inline-block;
+    /* border: 1px solid red; */
+    text-align: center;
+}
+
+.result .op {
+    /* font-size: smaller; */
+    /* font-weight: 600; */
+    margin-inline-start: 0.15em;
+    margin-inline-end: 0.15em;
+    transform: scale(0.65);
+    color: #9a9a9a;
 }

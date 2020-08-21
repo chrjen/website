@@ -51,14 +51,26 @@ main {
     content: "出力 》";
 }
 
-.result .number {
-    font-weight: 400;
-}
-
 span {
     display: inline-block;
     /* border: 1px solid red; */
     text-align: center;
+}
+
+.result .number {
+    font-weight: 400;
+}
+
+.result .paren {
+    color: #c46420;
+}
+
+.result .lparen {
+    margin-inline-start: -0.5em;
+}
+
+.result .rparen {
+    margin-inline-end: -0.5em;
 }
 
 .result .op {

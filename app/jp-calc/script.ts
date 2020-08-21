@@ -305,10 +305,19 @@ class NodeBinOp implements EvalNumber, HtmlObj {
 
     html(list: HTMLElement[]): HTMLElement[] {
 
+        // Left parenthesis.
+        let lspan = document.createElement("span");
+        lspan.classList.add("lparen");
+        lspan.classList.add("paren");
+        lspan.innerHTML = "（";
+        list.push(lspan);
+        
+        // Left operand.
         if (typeof (this.left as unknown as HtmlObj).html === 'function') {
             (this.left as unknown as HtmlObj).html(list);
         }
 
+        // Operator.
         let span = document.createElement("span");
         span.classList.add("op");
         span.classList.add("bin-op");
@@ -328,9 +337,17 @@ class NodeBinOp implements EvalNumber, HtmlObj {
         }
         list.push(span);
 
+        // Right operand.
         if (typeof (this.right as unknown as HtmlObj).html === 'function') {
             (this.right as unknown as HtmlObj).html(list);
         }
+
+        // Right parenthesis.
+        let rspan = document.createElement("span");
+        rspan.classList.add("rparen");
+        rspan.classList.add("paren");
+        rspan.innerHTML = "）";
+        list.push(rspan);
 
         return list;
     }

@@ -1,0 +1,12 @@
+expr: term PLUS term
+expr: term MINUS term
+expr: term
+
+term: factor MULTIPLY factor
+term: factor DIVIDE factor
+term: factor
+
+factor: NUMBER
+factor: PLUS NUMBER
+factor: MINUS NUMBER
+factor: LPAREN expr RPAREN

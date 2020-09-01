@@ -61,54 +61,94 @@ const 億 = 1_0000_0000;
 const 兆 = 1_0000_0000_0000;
 
 const kanjiDigits = "零一二三四五六七八九";
-function kanjiToNumber(str: string) : number|undefined {
+function kanjiToNumber(str: string) : number {
+    
+    if (str.length === 1 && str[0] === '零') {
+        return 0;
+    }
+
+    // Does the count parsing rule.
+    let count = function (): number {
+        let n = 0;
+        
+        if (str[0] === '千' || str[1] === '千') {
+            n += tens2() * 1000;
+            str = str.substring(1, str.length);
+        }
+        if (str[0] === '百') {
+            n += tens2() * 100;
+            str = str.substring(1, str.length);
+        }
+        if (str[0] === '十') {
+            n += tens2() * 10;
+            str = str.substring(1, str.length);
+        }
+        if (tens1() > 0) {
+            n += tens1();
+            str = str.substring(1, str.length);
+        }
+
+        return n;
+    };
+
+    let tens2 = function(): number {
+        let n = 0;
+
+        n = kanjiDigits.indexOf(str[0]);
+        if (n == 0 || n == 1) {
+            throw new Error("Failed to parse number, got " + str[0] + ": " + str);
+        }
+
+        return n;
+    }
+
+    let tens1 = function (): number {
+        let n = 0;
+
+        n = kanjiDigits.indexOf(str[0]);
+        if (n == 0) {
+            throw new Error("Failed to parse number, got " + str[0] + ": " + str);
+        }
+
+        return n;
+    }
+    
     let n = 0;
 
-    let index = str.indexOf('兆');
-    if (index > 0) {
-        var c = kanjiToNumber(str.substring(0, index));    
-        n += c * 1_0000_0000_0000;
-        str = str.substring(index+1, str.length);
+    let nc = count();
+    if (str[0] == '兆') {
+        if (nc < 1) {
+            throw new Error("Failed to parse 兆: " + str);
+        }
+        n += nc * 1_0000_0000_0000;
+        str = str.substring(1, str.length);
+        nc = count();
+    }
+    if (str[0] == '億') {
+        if (nc < 1) {
+            throw new Error("Failed to parse 億: " + str);
+        }
+        n += nc * 1_0000_0000_0000;
+        str = str.substring(1, str.length);
+        nc = count();
+    }
+    if (str[0] == '万') {
+        if (nc < 1) {
+            throw new Error("Failed to parse 万: " + str);
+        }
+        n += nc * 1_0000_0000_0000;
+        str = str.substring(1, str.length);
+        nc = count();
+    }
+    if (nc > 0) {
+        n += nc;
     }
 
-    index = str.indexOf('億');
-    if (index > 0) {
-        var c = kanjiToNumber(str.substring(0, index));
-        n += c * 1_0000_0000;
-        str = str.substring(index + 1, str.length);
+    if (str.length != 0) {
+        throw new Error("Failed to parse, number longer than expected: " + str);   
     }
 
-    index = str.indexOf('万');
-    if (index > 0) {
-        var c = kanjiToNumber(str.substring(0, index));
-        n += c * 10000;
-        str = str.substring(index + 1, str.length);
-    }
-
-    index = str.indexOf('千');
-    if (index >= 0) {
-        var c = index == 0 ? 1 : kanjiToNumber(str.substring(0, index));
-        n += c * 1000;
-        str = str.substring(index + 1, str.length);
-    }
-
-    index = str.indexOf('百');
-    if (index >= 0) {
-        var c = index == 0 ? 1 : kanjiToNumber(str.substring(0, index));
-        n += c * 100;
-        str = str.substring(index + 1, str.length);
-    }
-
-    index = str.indexOf('十');
-    if (index >= 0) {
-        var c = index == 0 ? 1 : kanjiToNumber(str.substring(0, index));
-        n += c * 10;
-        str = str.substring(index + 1, str.length);
-    }
-
-    n += kanjiDigits.indexOf(str);
-
-    return n >= 0 ? n : undefined;
+    return n;
 }
 
 function 漢数字形式変換(数) {

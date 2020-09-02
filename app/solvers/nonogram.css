@@ -4,11 +4,12 @@
 }
 
 .board-grid {
+    --col-width: 4;
+
     display: grid;
     grid-template-areas:
         "        . col-hints"
         "row-hints board";
-        
 }
 
 .hints-container {
@@ -72,7 +73,6 @@
 }
 
 .board {
-    --col-width: 4;
     grid-area: board;
     /* width: 200px;
     height: 200px;

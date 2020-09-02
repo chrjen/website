@@ -64,64 +64,129 @@ let non42_columns = [
     [2],
 ]
 
-function createBoard() {
-    let width = 35;
-    let height = 23;
-    let columns = non42_columns;
-    let rows = non42_rows;
-    let initialState = non42;
-    
-    let nonogramDiv = <HTMLDivElement>document.getElementById("nonogram");
-    nonogramDiv.innerHTML = "";
+enum TileType {
+    Marked = -1,
+    Blank = 0,
+    Filled = 1
+}
 
-    let columnHintsDiv = document.createElement("div");
-    columnHintsDiv.classList.add("column");
-    columnHintsDiv.classList.add("hints-container");
-    
-    for (let i = 0; i < width; i++) {
-        let hintsDiv = document.createElement("div");
-        hintsDiv.classList.add("hints");
-        for (let j = 0; j < columns[i].length; j++) {
-            let hintDiv = document.createElement("div");
-            hintDiv.classList.add("hint");
-            hintDiv.innerHTML = columns[i][j].toString();
-            hintsDiv.append(hintDiv);
-        }
-        columnHintsDiv.append(hintsDiv);
-    }
-    
-    let rowHintsDiv = document.createElement("div");
-    rowHintsDiv.classList.add("row");
-    rowHintsDiv.classList.add("hints-container");
+class Nonogram {
 
-    for (let i = 0; i < height; i++) {
-        let hintsDiv = document.createElement("div");
-        hintsDiv.classList.add("hints");
-        for (let j = 0; j < rows[i].length; j++) {
-            let hintDiv = document.createElement("div");
-            hintDiv.classList.add("hint");
-            hintDiv.innerHTML = rows[i][j].toString();
-            hintsDiv.append(hintDiv);
-        }
-        rowHintsDiv.append(hintsDiv);
+    private _width: number;
+    private _height: number;
+    private hint_cols: number[][];
+    private hint_rows: number[][];
+    private boardState: TileType[];
+
+    private parentDiv: HTMLElement;
+
+    constructor(parent: HTMLElement) {
+        this.parentDiv = parent;
     }
 
-    let boardDiv = document.createElement("div");
-    boardDiv.classList.add("board");
-    boardDiv.style.setProperty("--col-width", width.toString());
-
-    for (let i = 0; i < width * height; i++) {
-        let tile = document.createElement("div");
-        boardDiv.append(tile);
-
-        if (initialState[i] == "1") {
-            tile.classList.add("filled");
-        } else {
-            tile.classList.add("marked");
-        }
+    
+    public set width(width: number) {
+        this._width = width;
+        this.parentDiv.style.setProperty("--col-width", this._width.toString());
     }
 
-    nonogramDiv.append(columnHintsDiv);
-    nonogramDiv.append(rowHintsDiv);
-    nonogramDiv.append(boardDiv);
+    public set height(height: number) {
+        this._height = height;
+    }
+    
+    public set board(board: TileType[]) {
+        this.boardState = board;
+
+        let boardDiv = document.createElement("div");
+        boardDiv.classList.add("board");
+
+        for (let i = 0; i < this._width * this._height; i++) {
+            let tile = document.createElement("div");
+            boardDiv.append(tile);
+
+            if (this.boardState[i] == TileType.Filled) {
+                tile.classList.add("filled");
+            } else {
+                tile.classList.add("marked");
+            }
+        }
+
+        let old = this.parentDiv.getElementsByClassName("board")
+        for (let i = 0; i < old.length; i++) {
+            old[i].remove();
+        }
+        this.parentDiv.append(boardDiv);
+    }
+    
+
+    public set cols(hints: number[][]) {
+        this.hint_cols = hints;
+
+        let columnHintsDiv = document.createElement("div");
+        columnHintsDiv.classList.add("column");
+        columnHintsDiv.classList.add("hints-container");
+        
+        for (let i = 0; i < this._width; i++) {
+            let hintsDiv = document.createElement("div");
+            hintsDiv.classList.add("hints");
+            for (let j = 0; j < this.hint_cols[i].length; j++) {
+                let hintDiv = document.createElement("div");
+                hintDiv.classList.add("hint");
+                hintDiv.innerHTML = this.hint_cols[i][j].toString();
+                hintsDiv.append(hintDiv);
+            }
+            columnHintsDiv.append(hintsDiv);
+        }
+        
+        let old = this.parentDiv.querySelectorAll(".column.hints-container")
+        for (let i = 0; i < old.length; i++) {
+            old[i].remove();
+        }
+        this.parentDiv.append(columnHintsDiv);
+    }
+    
+    public set rows(hints: number[][]) {
+        this.hint_rows = hints;
+
+        let rowHintsDiv = document.createElement("div");
+        rowHintsDiv.classList.add("row");
+        rowHintsDiv.classList.add("hints-container");
+
+        for (let i = 0; i < this._height; i++) {
+            let hintsDiv = document.createElement("div");
+            hintsDiv.classList.add("hints");
+            for (let j = 0; j < this.hint_rows[i].length; j++) {
+                let hintDiv = document.createElement("div");
+                hintDiv.classList.add("hint");
+                hintDiv.innerHTML = this.hint_rows[i][j].toString();
+                hintsDiv.append(hintDiv);
+            }
+            rowHintsDiv.append(hintsDiv);
+        }
+
+        let old = this.parentDiv.querySelectorAll(".rows.hints-container")
+        for (let i = 0; i < old.length; i++) {
+            old[i].remove();
+        }
+        this.parentDiv.append(rowHintsDiv);
+    }
+}
+
+var nonogram;
+
+function onloadBody() {
+    let parent = <HTMLDivElement>document.getElementById("nonogram");
+    parent.innerHTML = "";
+
+    nonogram = new Nonogram(parent);
+    nonogram.width = 35;
+    nonogram.height = 23;
+    nonogram.cols = non42_columns;
+    nonogram.rows = non42_rows;
+    
+    let board: TileType[] = [];
+    for (let i = 0; i < non42.length; i++) {
+        board.push(parseInt(non42[i]));
+    }
+    nonogram.board = board;
 }

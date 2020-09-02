@@ -12,6 +12,7 @@
 }
 
 .hints-container {
+    --hints-margin: 5px;
     display: inline-flex;
     justify-content: space-around;
 }
@@ -19,11 +20,13 @@
 .column.hints-container {
     grid-area: col-hints;
     flex-direction: row;
+    margin-bottom: var(--hints-margin);
 }
 
 .row.hints-container {
     grid-area: row-hints;
     flex-direction: column;
+    margin-right: var(--hints-margin);
 }
 
 
@@ -41,11 +44,31 @@
 }
 
 .hint {
+    --hint-size: 1.5em;
+    --hint-margin: 2px;
+    
+    overflow: hidden;
+    border-radius: 3px;
+
+    width: var(--hint-size);
+    height: var(--hint-size);
+    
     font-size: 10pt;
     font-family: monospace;
-    width: 1.5em;
-    height: 1.5em;
     text-align: center;
+    vertical-align: middle;
+    line-height: var(--hint-size);
+   
+    color: #4f6f7f;
+    background-color: #aadbee;
+}
+
+.column .hint {
+    margin: var(--hint-margin) 0 var(--hint-margin) 0;
+}
+
+.row .hint {
+    margin: 0 var(--hint-margin) 0 var(--hint-margin);
 }
 
 .board {
@@ -57,11 +80,22 @@
 
     display: grid;
     grid-template-columns: repeat(var(--col-width), 1fr);
+    /* background-color: lightgrey; */
 }
 
 .board div {
+    --border-size: 1px;
+    overflow: hidden;
+    border-radius: 4px;
+
+    border: var(--border-size) solid lightgrey;
+    background-color: white;
     width: 22px;
     height: 22px;
-    margin: 2px;
-    background-color: black;
+    margin-right: calc(-1*var(--border-size));
+    margin-bottom: calc(-1*var(--border-size));
+}
+
+.board div.filled {
+    background-color: #101530;
 }

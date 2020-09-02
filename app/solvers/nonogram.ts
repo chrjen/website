@@ -116,6 +116,8 @@ function createBoard() {
 
         if (initialState[i] == "1") {
             tile.classList.add("filled");
+        } else {
+            tile.classList.add("marked");
         }
     }
 

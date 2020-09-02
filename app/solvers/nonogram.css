@@ -96,15 +96,15 @@
     margin-bottom: calc(-1*var(--border-size));
 }
 
-.board div:not(.filled)::before {
+.board div.filled {
+    background-color: #101530;
+}
+
+.board div.marked::before {
     display: inline-block;
     width: 100%;
     height: 100%;
     content: "⨯";
     text-align: center;
     vertical-align: middle;
-}
-
-.board div.filled {
-    background-color: #101530;
 }

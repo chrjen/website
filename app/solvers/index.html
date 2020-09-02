@@ -6,11 +6,13 @@
     <title>Nonogram solver</title>
 
     <link rel="stylesheet" href="nonogram.css">
+
+    <script src="nonogram.js"></script>
 </head>
-<body>
+<body onload="createBoard()">
     <h1>Nonogram solver</h1>
     <div class="board-container">
-        <div class="board-grid">
+        <div id="nonogram" class="board-grid">
 
             <div class="column hints-container"> 
                 <div class="hints">

@@ -69,27 +69,60 @@ var TileType;
 })(TileType || (TileType = {}));
 class Nonogram {
     constructor(parent) {
+        this.boardHandler = {
+            get: (board, index) => {
+                let val = board[index];
+                return (val == undefined ? 0 : val);
+            },
+            set: (board, index, value) => {
+                board[index] = value;
+                if (index > this._width * this._height) {
+                    return false;
+                }
+                let tiles = this.parentDiv.querySelectorAll(".board div");
+                let tile = tiles[index];
+                switch (board[index]) {
+                    case TileType.Filled:
+                        tile.classList.add("filled");
+                        break;
+                    case TileType.Marked:
+                        tile.classList.add("marked");
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        };
         this.parentDiv = parent;
     }
     set width(width) {
         this._width = width;
         this.parentDiv.style.setProperty("--col-width", this._width.toString());
+        this.board = [];
     }
     set height(height) {
         this._height = height;
+        this.board = [];
     }
     set board(board) {
         this.boardState = board;
+        this.boardProxy = new Proxy(this.boardState, this.boardHandler);
+        // this.boardProxy.parent = this;
         let boardDiv = document.createElement("div");
         boardDiv.classList.add("board");
         for (let i = 0; i < this._width * this._height; i++) {
             let tile = document.createElement("div");
             boardDiv.append(tile);
-            if (this.boardState[i] == TileType.Filled) {
-                tile.classList.add("filled");
-            }
-            else {
-                tile.classList.add("marked");
+            switch (this.boardState[i]) {
+                case TileType.Filled:
+                    tile.classList.add("filled");
+                    break;
+                case TileType.Marked:
+                    tile.classList.add("marked");
+                    break;
+                default:
+                    break;
             }
         }
         let old = this.parentDiv.getElementsByClassName("board");
@@ -97,6 +130,9 @@ class Nonogram {
             old[i].remove();
         }
         this.parentDiv.append(boardDiv);
+    }
+    get board() {
+        return this.boardProxy;
     }
     set cols(hints) {
         this.hint_cols = hints;
@@ -154,8 +190,17 @@ function onloadBody() {
     nonogram.rows = non42_rows;
     let board = [];
     for (let i = 0; i < non42.length; i++) {
-        board.push(parseInt(non42[i]));
+        let t = parseInt(non42[i]);
+        t = (t == 0 ? -1 : t);
+        board.push(t);
     }
-    nonogram.board = board;
+    let index = 0;
+    let init = setInterval((board, nonogram) => {
+        nonogram.board[index] = board[index];
+        index++;
+        if (index > 35 * 23) {
+            clearInterval(init);
+        }
+    }, 15, board, nonogram);
 }
 //# sourceMappingURL=nonogram.js.map

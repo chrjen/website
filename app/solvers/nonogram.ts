@@ -78,6 +78,9 @@ class Nonogram {
     private boardState: TileType[];
     private boardProxy: TileType[];
     private parentDiv: HTMLElement;
+    
+    private isDrawing: boolean;
+    private drawTileType: TileType;
 
     private boardHandler: ProxyHandler<TileType[]> = {
         get: (board, index): number => {
@@ -86,12 +89,13 @@ class Nonogram {
         },
         set: (board, index: number, value): boolean => {
             board[index] = value;
-            if (index > this._width * this._height) {
+            if (index < 0 || index > this._width * this._height) {
                 return false;
             }
 
             let tiles = this.parentDiv.querySelectorAll(".board div");
             let tile = tiles[index];
+            tile.className = "";
             switch (board[index]) {
                 case TileType.Filled:
                     tile.classList.add("filled");
@@ -112,6 +116,7 @@ class Nonogram {
 
     constructor(parent: HTMLElement) {
         this.parentDiv = parent;
+        window.onmouseup = this.tileOnRelease.bind(this);
     }
     
     public set width(width: number) {
@@ -135,6 +140,11 @@ class Nonogram {
 
         for (let i = 0; i < this._width * this._height; i++) {
             let tile = document.createElement("div");
+            tile.onmousedown = this.tileOnClick.bind(this);
+            tile.onmouseenter = this.tileOnHover.bind(this);
+            tile.setAttribute("x", (i % this._width).toString());
+            tile.setAttribute("y", Math.floor(i / this._width).toString());
+            tile.setAttribute("index", i.toString());
             boardDiv.append(tile);
 
             switch (this.boardState[i]) {
@@ -161,7 +171,6 @@ class Nonogram {
     public get board() {
         return this.boardProxy;
     }
-    
 
     public set cols(hints: number[][]) {
         this.hint_cols = hints;
@@ -214,6 +223,33 @@ class Nonogram {
         }
         this.parentDiv.append(rowHintsDiv);
     }
+
+    public tileOnClick(event: { target: HTMLDivElement; }) {
+        this.isDrawing = true;
+        let tile = event.target;
+        let index = tile.getAttribute("index");
+        
+        // this.drawTileType = this.boardState[index];
+        this.drawTileType = TileType.Blank;
+        this.board[index] = this.drawTileType;
+
+        return false;
+    }
+    
+    public tileOnHover(event: { target: HTMLDivElement; }) {
+        if (!this.isDrawing) {
+            return false;
+        }
+        let tile = event.target;
+        let index = tile.getAttribute("index");
+        this.board[index] = this.drawTileType;
+        
+        return true;
+    }
+    
+    public tileOnRelease() {
+        this.isDrawing = false;
+    }
 }
 
 var nonogram;
@@ -239,8 +275,8 @@ function onloadBody() {
     let init = setInterval((board: TileType[], nonogram: Nonogram) => {
         nonogram.board[index] = board[index];
         index++;
-        if (index > 35*23) {
+        if (index >= 35*23) {
             clearInterval(init);
         }
-    }, 15, board, nonogram);
+    }, 1, board, nonogram);
 }

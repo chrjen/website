@@ -80,6 +80,7 @@ class Nonogram {
     private parentDiv: HTMLElement;
     
     private isDrawing: boolean;
+    private isErasing: boolean;
     private drawTileType: TileType;
 
     private boardHandler: ProxyHandler<TileType[]> = {
@@ -225,30 +226,46 @@ class Nonogram {
     }
 
     public tileOnClick(event: { target: HTMLDivElement; }) {
-        this.isDrawing = true;
-        let tile = event.target;
-        let index = tile.getAttribute("index");
+        let index = event.target.getAttribute("index");
         
-        // this.drawTileType = this.boardState[index];
-        this.drawTileType = TileType.Blank;
-        this.board[index] = this.drawTileType;
+        if (this.boardState[index] === TileType.Blank) {
+            this.isDrawing = true;
+            this.drawTileType = TileType.Filled;
+        } else {
+            this.isErasing = true;
+            this.drawTileType = this.boardState[index];
+        }
+
+        this.tileOnHover(event);
 
         return false;
     }
     
     public tileOnHover(event: { target: HTMLDivElement; }) {
-        if (!this.isDrawing) {
+        if (this.isDrawing) {
+
+            let index = event.target.getAttribute("index");
+            if (this.board[index] === TileType.Blank) {
+                this.board[index] = this.drawTileType;
+            }
+
+        } else if (this.isErasing) {
+
+            let index = event.target.getAttribute("index");
+            if (this.board[index] === this.drawTileType) {
+                this.board[index] = TileType.Blank;
+            }
+
+        } else {
             return false;
         }
-        let tile = event.target;
-        let index = tile.getAttribute("index");
-        this.board[index] = this.drawTileType;
-        
+
         return true;
     }
     
     public tileOnRelease() {
         this.isDrawing = false;
+        this.isErasing = false;
     }
 }
 
@@ -264,19 +281,9 @@ function onloadBody() {
     nonogram.cols = non42_columns;
     nonogram.rows = non42_rows;
     
-    let board: TileType[] = [];
     for (let i = 0; i < non42.length; i++) {
         let t = parseInt(non42[i]);
         t = (t == 0 ? -1 : t);
-        board.push(t);
+        nonogram.board[i] = t;
     }
-
-    let index = 0;
-    let init = setInterval((board: TileType[], nonogram: Nonogram) => {
-        nonogram.board[index] = board[index];
-        index++;
-        if (index >= 35*23) {
-            clearInterval(init);
-        }
-    }, 1, board, nonogram);
 }

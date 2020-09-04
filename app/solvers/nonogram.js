@@ -186,25 +186,39 @@ class Nonogram {
         this.parentDiv.append(rowHintsDiv);
     }
     tileOnClick(event) {
-        this.isDrawing = true;
-        let tile = event.target;
-        let index = tile.getAttribute("index");
-        // this.drawTileType = this.boardState[index];
-        this.drawTileType = TileType.Blank;
-        this.board[index] = this.drawTileType;
+        let index = event.target.getAttribute("index");
+        if (this.boardState[index] === TileType.Blank) {
+            this.isDrawing = true;
+            this.drawTileType = TileType.Filled;
+        }
+        else {
+            this.isErasing = true;
+            this.drawTileType = this.boardState[index];
+        }
+        this.tileOnHover(event);
         return false;
     }
     tileOnHover(event) {
-        if (!this.isDrawing) {
+        if (this.isDrawing) {
+            let index = event.target.getAttribute("index");
+            if (this.board[index] === TileType.Blank) {
+                this.board[index] = this.drawTileType;
+            }
+        }
+        else if (this.isErasing) {
+            let index = event.target.getAttribute("index");
+            if (this.board[index] === this.drawTileType) {
+                this.board[index] = TileType.Blank;
+            }
+        }
+        else {
             return false;
         }
-        let tile = event.target;
-        let index = tile.getAttribute("index");
-        this.board[index] = this.drawTileType;
         return true;
     }
     tileOnRelease() {
         this.isDrawing = false;
+        this.isErasing = false;
     }
 }
 var nonogram;
@@ -216,19 +230,10 @@ function onloadBody() {
     nonogram.height = 23;
     nonogram.cols = non42_columns;
     nonogram.rows = non42_rows;
-    let board = [];
     for (let i = 0; i < non42.length; i++) {
         let t = parseInt(non42[i]);
         t = (t == 0 ? -1 : t);
-        board.push(t);
+        nonogram.board[i] = t;
     }
-    let index = 0;
-    let init = setInterval((board, nonogram) => {
-        nonogram.board[index] = board[index];
-        index++;
-        if (index >= 35 * 23) {
-            clearInterval(init);
-        }
-    }, 1, board, nonogram);
 }
 //# sourceMappingURL=nonogram.js.map

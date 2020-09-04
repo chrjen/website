@@ -12,6 +12,19 @@
 <body onload="onloadBody()">
     <h1>Nonogram solver</h1>
     <div class="board-container">
+        <div class="nonogram-controls">
+            <h5>Fill Type</h5>
+            <div>
+                <input type="radio" name="fill-type" value="filled" checked />
+                <!-- <label>Filled</label> -->
+                <div class="board"><div class="filled"></div></div>
+            </div>
+            <div>
+                <input type="radio" name="fill-type" value="marked" />
+                <!-- <label>Marked</label> -->
+                <div class="board"><div class="marked"></div></div>
+            </div>
+        </div>
         <div id="nonogram" class="board-grid">
 
             <div class="column hints-container"> 

@@ -82,6 +82,7 @@ class Nonogram {
     private isDrawing: boolean;
     private isErasing: boolean;
     private drawTileType: TileType;
+    private fillTileType: TileType;
 
     private boardHandler: ProxyHandler<TileType[]> = {
         get: (board, index): number => {
@@ -115,9 +116,16 @@ class Nonogram {
     };
 
 
-    constructor(parent: HTMLElement) {
+    constructor(parent: HTMLElement, controls: HTMLElement) {
         this.parentDiv = parent;
         window.onmouseup = this.tileOnRelease.bind(this);
+
+        let radioBtns = <NodeListOf<HTMLInputElement>>controls.querySelectorAll('input[name="fill-type"]');
+        for (let i = 0; i < radioBtns.length; i++) {
+            radioBtns[i].onchange = this.onFillTypeChange.bind(this);
+        }
+
+        this.onFillTypeChange({ target: controls.querySelector('input[name="fill-type"]:checked') });
     }
     
     public set width(width: number) {
@@ -134,7 +142,6 @@ class Nonogram {
     public set board(board: TileType[]) {
         this.boardState = board;
         this.boardProxy = new Proxy(this.boardState, this.boardHandler);
-        // this.boardProxy.parent = this;
 
         let boardDiv = document.createElement("div");
         boardDiv.classList.add("board");
@@ -230,7 +237,7 @@ class Nonogram {
         
         if (this.boardState[index] === TileType.Blank) {
             this.isDrawing = true;
-            this.drawTileType = TileType.Filled;
+            this.drawTileType = this.fillTileType;
         } else {
             this.isErasing = true;
             this.drawTileType = this.boardState[index];
@@ -267,6 +274,20 @@ class Nonogram {
         this.isDrawing = false;
         this.isErasing = false;
     }
+
+    public onFillTypeChange(event: { target: HTMLInputElement; }) {
+        switch(event.target.value) {
+            case "filled":
+                this.fillTileType = TileType.Filled;
+                break;
+
+            case "marked":
+                this.fillTileType = TileType.Marked;
+                break;
+        }
+
+        return true;
+    }
 }
 
 var nonogram;
@@ -275,7 +296,9 @@ function onloadBody() {
     let parent = <HTMLDivElement>document.getElementById("nonogram");
     parent.innerHTML = "";
 
-    nonogram = new Nonogram(parent);
+    let controls = <HTMLElement>document.querySelector(".board-container .nonogram-controls");
+
+    nonogram = new Nonogram(parent, controls);
     nonogram.width = 35;
     nonogram.height = 23;
     nonogram.cols = non42_columns;

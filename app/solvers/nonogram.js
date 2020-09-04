@@ -191,6 +191,10 @@ class Nonogram {
     }
     tileOnClick(event) {
         let index = event.target.getAttribute("index");
+        this.drawAxes = {
+            x: parseInt(event.target.getAttribute("x")),
+            y: parseInt(event.target.getAttribute("y"))
+        };
         if (this.boardState[index] === TileType.Blank) {
             this.isDrawing = true;
             this.drawTileType = this.fillTileType;
@@ -203,6 +207,11 @@ class Nonogram {
         return false;
     }
     tileOnHover(event) {
+        let x = parseInt(event.target.getAttribute("x"));
+        let y = parseInt(event.target.getAttribute("y"));
+        if (this.drawAxes.x != x && this.drawAxes.y != y) {
+            return false;
+        }
         if (this.isDrawing) {
             let index = event.target.getAttribute("index");
             if (this.board[index] === TileType.Blank) {

@@ -79,6 +79,7 @@ class Nonogram {
     private boardProxy: TileType[];
     private parentDiv: HTMLElement;
     
+    private drawAxes: { x: number, y: number };
     private isDrawing: boolean;
     private isErasing: boolean;
     private drawTileType: TileType;
@@ -234,6 +235,10 @@ class Nonogram {
 
     public tileOnClick(event: { target: HTMLDivElement; }) {
         let index = event.target.getAttribute("index");
+        this.drawAxes = {
+            x: parseInt(event.target.getAttribute("x")),
+            y: parseInt(event.target.getAttribute("y"))
+        }
         
         if (this.boardState[index] === TileType.Blank) {
             this.isDrawing = true;
@@ -249,6 +254,13 @@ class Nonogram {
     }
     
     public tileOnHover(event: { target: HTMLDivElement; }) {
+        let x = parseInt(event.target.getAttribute("x"));
+        let y = parseInt(event.target.getAttribute("y"));
+
+        if (this.drawAxes.x != x && this.drawAxes.y != y) {
+            return false;
+        }
+
         if (this.isDrawing) {
 
             let index = event.target.getAttribute("index");

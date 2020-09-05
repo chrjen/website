@@ -102,6 +102,7 @@ class Nonogram {
             radioBtns[i].onchange = this.onFillTypeChange.bind(this);
         }
         this.onFillTypeChange({ target: controls.querySelector('input[name="fill-type"]:checked') });
+        this.drawAxes = { x: 0, y: 0 };
     }
     set width(width) {
         this._width = width;
@@ -195,7 +196,7 @@ class Nonogram {
             x: parseInt(event.target.getAttribute("x")),
             y: parseInt(event.target.getAttribute("y"))
         };
-        if (this.boardState[index] === TileType.Blank) {
+        if (this.board[index] === TileType.Blank) {
             this.isDrawing = true;
             this.drawTileType = this.fillTileType;
         }
@@ -255,10 +256,10 @@ function onloadBody() {
     nonogram.height = 23;
     nonogram.cols = non42_columns;
     nonogram.rows = non42_rows;
-    for (let i = 0; i < non42.length; i++) {
-        let t = parseInt(non42[i]);
-        t = (t == 0 ? -1 : t);
-        nonogram.board[i] = t;
-    }
+    // for (let i = 0; i < non42.length; i++) {
+    //     let t = parseInt(non42[i]);
+    //     t = (t == 0 ? -1 : t);
+    //     nonogram.board[i] = t;
+    // }
 }
 //# sourceMappingURL=nonogram.js.map

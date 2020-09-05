@@ -40,6 +40,15 @@ function generateGrid() {
     }
     bits = replaceAt(bits, sum, bits[sum] == "0" ? "1" : "0");
 
+
+    let parity = 0;
+    for (let i = 1; i < bits.length; i++) {
+        parity += parseInt(bits[i]);
+    }
+    console.log(parity, parity % 2);
+    parity = parity % 2;
+    bits = replaceAt(bits, 0, parity);
+
     for (let i = 0; i < width*width; i++) {
         let tile = document.createElement("div");
         tile.innerHTML = i.toString();

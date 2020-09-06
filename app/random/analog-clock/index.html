@@ -6,6 +6,8 @@
     <title>Analog clock</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="script.js"></script>
 </head>
 <body>
     <h1>Analog clock</h1>
@@ -14,14 +16,16 @@
     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docname="clock.svg"
-    inkscape:version="1.0 (4035a4fb49, 2020-05-01)" id="svg8" version="1.1" viewBox="0 0 24 24">
+    inkscape:version="1.0 (4035a4fb49, 2020-05-01)" id="svg8" version="1.1" viewBox="0 0 24 24"
+    onload="onClockLoad();">
     <defs id="defs2" />
-    <sodipodi:namedview inkscape:snap-center="true" inkscape:window-maximized="1" inkscape:window-y="41"
-        inkscape:window-x="1454" inkscape:window-height="1381" inkscape:window-width="2528" units="px" showgrid="true"
-        inkscape:document-rotation="0" inkscape:current-layer="layer1" inkscape:document-units="px"
-        inkscape:cy="131.74719" inkscape:cx="120.0963" inkscape:zoom="3.959798" inkscape:pageshadow="2"
-        inkscape:pageopacity="0" borderopacity="1.0" bordercolor="#666666" pagecolor="#d1d1d1" id="base">
-        <inkscape:grid snapvisiblegridlinesonly="true" dotted="false" empspacing="6" spacingy="0.4" spacingx="0.4"
+    <sodipodi:namedview inkscape:snap-grids="true" inkscape:snap-center="true" inkscape:window-maximized="1"
+        inkscape:window-y="41" inkscape:window-x="1454" inkscape:window-height="1381" inkscape:window-width="2528"
+        units="px" showgrid="true" inkscape:document-rotation="0" inkscape:current-layer="layer3"
+        inkscape:document-units="px" inkscape:cy="68.432142" inkscape:cx="91.484969" inkscape:zoom="5.6"
+        inkscape:pageshadow="2" inkscape:pageopacity="0" borderopacity="1.0" bordercolor="#666666" pagecolor="#d1d1d1"
+        id="base">
+        <inkscape:grid snapvisiblegridlinesonly="true" dotted="false" empspacing="6" spacingy="0.1" spacingx="0.1"
             id="grid833" type="xygrid" />
     </sodipodi:namedview>
     <metadata id="metadata5">
@@ -33,193 +37,196 @@
             </cc:Work>
         </rdf:RDF>
     </metadata>
-    <g id="layer1" inkscape:groupmode="layer" inkscape:label="Layer 1">
+    <g id="layer1" inkscape:groupmode="layer" inkscape:label="clock face">
         <circle r="10.8" cy="12" cx="12" id="path873"
             style="fill:#ffffff;stroke:#000000;stroke-width:0.4;stroke-linecap:square;stroke-linejoin:round" />
         <g transform="rotate(-0.33975201,11.973188,12.000033)" id="g1076">
-            <rect transform="matrix(0.99999996,2.9984403e-4,3.1580234e-4,0.99999995,0,0)"
-                inkscape:transform-center-y="-6.720905" inkscape:transform-center-x="0.0075288582" rx="0.028095985"
-                y="1.5182626" x="-1.9455469" height="0.79993516" width="0.070239276" id="use896"
-                style="fill:#000000;stroke:none;stroke-width:0.273707;stroke-linecap:square;stroke-linejoin:round" />
-            <rect rx="0.25" inkscape:transform-center-y="-9.7999997" transform="rotate(0.33975201)" y="3.1287909"
-                x="-2.3290532" height="0.40000007" width="0.40000001" id="rect1122"
-                style="fill:#000000;stroke:none;stroke-width:0.23094;stroke-linecap:square;stroke-linejoin:round" />
-            <use height="100%" width="100%" transform="rotate(-6,6.9446327,-121.11388)" id="use1492"
+            <use height="100%" width="100%" transform="rotate(-5.660248,6.2247521,-129.08042)" id="use1492"
                 inkscape:transform-center-y="-10.025849" inkscape:transform-center-x="1.0645319" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="2.1066868"
-                inkscape:transform-center-y="-9.8596524" id="use1494" transform="rotate(-12,5.9842108,-54.424389)"
-                width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-18,5.6628967,-32.113077)" id="use1496"
+                inkscape:transform-center-y="-9.8596524" id="use1494"
+                transform="rotate(-11.660248,5.6077037,-56.334287)" width="100%" height="100%" />
+            <use height="100%" width="100%" transform="rotate(-17.660248,5.4092304,-32.935547)" id="use1496"
                 inkscape:transform-center-y="-9.5854314" inkscape:transform-center-x="3.1257604" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="4.1105875"
-                inkscape:transform-center-y="-9.2061904" id="use1498" transform="rotate(-24,5.5013547,-20.895972)"
-                width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-36,5.3380233,-9.5546098)" id="use1500"
+                inkscape:transform-center-y="-9.2061904" id="use1498"
+                transform="rotate(-23.660248,5.3108903,-21.341862)" width="100%" height="100%" />
+            <use height="100%" width="100%" transform="rotate(-35.660248,5.2124236,-9.7332542)" id="use1500"
                 inkscape:transform-center-y="-8.1503738" inkscape:transform-center-x="5.9348359" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="6.7542702"
-                inkscape:transform-center-y="-7.4853659" id="use1502" transform="rotate(-42,5.2905788,-6.2601775)"
-                width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-48,5.2545331,-3.7572419)" id="use1504"
+                inkscape:transform-center-y="-7.4853659" id="use1502"
+                transform="rotate(-41.660248,5.1840004,-6.3823468)" width="100%" height="100%" />
+            <use height="100%" width="100%" transform="rotate(-47.660248,5.1624597,-3.8428238)" id="use1504"
                 inkscape:transform-center-y="-6.7383468" inkscape:transform-center-x="7.4997033" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="8.1629681"
-                inkscape:transform-center-y="-5.9175009" id="use1506" transform="rotate(-54,5.2260795,-1.7814917)"
-                width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-66,5.1836395,1.1654463)" id="use1508"
+                inkscape:transform-center-y="-5.9175009" id="use1506"
+                transform="rotate(-53.660248,5.1454885,-1.8420335)" width="100%" height="100%" />
+            <use height="100%" width="100%" transform="rotate(-65.660248,5.1202284,1.1359762)" id="use1508"
                 inkscape:transform-center-y="-4.0910128" inkscape:transform-center-x="9.2149051" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="9.5920521"
-                inkscape:transform-center-y="-3.1053819" id="use1510" transform="rotate(-72,5.1672271,2.3050784)"
+                inkscape:transform-center-y="-3.1053819" id="use1510" transform="rotate(-71.660248,5.1104769,2.2856144)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-78,5.1530233,3.2913616)" id="use1512"
+            <use height="100%" width="100%" transform="rotate(-77.660248,5.1020453,3.2796544)" id="use1512"
                 inkscape:transform-center-y="-2.0857278" inkscape:transform-center-x="9.8641066" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="10.028088"
-                inkscape:transform-center-y="-1.043222" id="use1514" transform="rotate(-84,5.1405462,4.1577435)"
+                inkscape:transform-center-y="-1.043222" id="use1514" transform="rotate(-83.660248,5.0946445,4.1521597)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-96,5.1194431,5.6230962)" id="use1516"
+            <use height="100%" width="100%" transform="rotate(-95.660248,5.0821397,5.6264018)" id="use1516"
                 inkscape:transform-center-y="1.0645317" inkscape:transform-center-x="10.025848" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="9.8596514"
-                inkscape:transform-center-y="2.1066866" id="use1518" transform="rotate(-102,5.1103456,6.2548038)"
+                inkscape:transform-center-y="2.1066866" id="use1518" transform="rotate(-101.66025,5.0767537,6.2613733)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-108,5.1019889,6.8350761)" id="use1520"
+            <use height="100%" width="100%" transform="rotate(-107.66025,5.0718088,6.8443425)" id="use1520"
                 inkscape:transform-center-y="3.1257602" inkscape:transform-center-x="9.5854304" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="9.2061894"
-                inkscape:transform-center-y="4.1105873" id="use1522" transform="rotate(-114,5.0942452,7.3727799)"
+                inkscape:transform-center-y="4.1105873" id="use1522" transform="rotate(-113.66025,5.0672289,7.384288)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-126,5.0802023,8.3478912)" id="use1524"
+            <use height="100%" width="100%" transform="rotate(-125.66025,5.0589287,8.3628335)" id="use1524"
                 inkscape:transform-center-y="5.9348357" inkscape:transform-center-x="8.1503728" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="7.4853649"
-                inkscape:transform-center-y="6.75427" id="use1526" transform="rotate(-132,5.0737474,8.7961007)"
+                inkscape:transform-center-y="6.75427" id="use1526" transform="rotate(-131.66025,5.0551158,8.8123489)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-138,5.0675869,9.2238707)" id="use1528"
+            <use height="100%" width="100%" transform="rotate(-137.66025,5.0514781,9.2412053)" id="use1528"
                 inkscape:transform-center-y="7.4997031" inkscape:transform-center-x="6.7383458" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="5.9174999"
-                inkscape:transform-center-y="8.1629679" id="use1530" transform="rotate(-144,5.0616694,9.6347687)"
+                inkscape:transform-center-y="8.1629679" id="use1530" transform="rotate(-143.66025,5.0479852,9.6529997)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-156,5.0503891,10.418046)" id="use1532"
+            <use height="100%" width="100%" transform="rotate(-155.66025,5.0413301,10.437587)" id="use1532"
                 inkscape:transform-center-y="9.2149049" inkscape:transform-center-x="4.0910118" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="3.1053809"
-                inkscape:transform-center-y="9.5920519" id="use1534" transform="rotate(-162,5.0449507,10.795678)"
+                inkscape:transform-center-y="9.5920519" id="use1534" transform="rotate(-161.66025,5.0381232,10.815663)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(-168,5.0396018,11.167091)" id="use1536"
+            <use height="100%" width="100%" transform="rotate(-167.66025,5.0349701,11.187395)" id="use1536"
                 inkscape:transform-center-y="9.8641064" inkscape:transform-center-x="2.0857268" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="1.043221"
-                inkscape:transform-center-y="10.028088" id="use1538" transform="rotate(-174,5.0343115,11.534435)"
+                inkscape:transform-center-y="10.028088" id="use1538" transform="rotate(-173.66025,5.0318525,11.554939)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(174,5.023789,12.2651)" id="use1540"
+            <use height="100%" width="100%" transform="rotate(174.33975,5.0256544,12.28566)" id="use1540"
                 inkscape:transform-center-y="10.025848" inkscape:transform-center-x="-1.0645327" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-2.1066876"
-                inkscape:transform-center-y="9.8596514" id="use1542" transform="rotate(168,5.0184986,12.632444)"
+                inkscape:transform-center-y="9.8596514" id="use1542" transform="rotate(168.33975,5.0225396,12.652861)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(162,5.0131498,13.003857)" id="use1544"
+            <use height="100%" width="100%" transform="rotate(162.33975,5.0193915,13.024012)" id="use1544"
                 inkscape:transform-center-y="9.5854304" inkscape:transform-center-x="-3.1257612" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-4.1105883"
-                inkscape:transform-center-y="9.2061894" id="use1546" transform="rotate(156,5.0077114,13.381489)"
+                inkscape:transform-center-y="9.2061894" id="use1546" transform="rotate(156.33975,5.0161917,13.401258)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(144,4.9964311,14.164766)" id="use1548"
+            <use height="100%" width="100%" transform="rotate(144.33975,5.0095578,14.183348)" id="use1548"
                 inkscape:transform-center-y="8.1503728" inkscape:transform-center-x="-5.9348367" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-6.754271"
-                inkscape:transform-center-y="7.4853649" id="use1550" transform="rotate(138,4.9905136,14.575665)"
+                inkscape:transform-center-y="7.4853649" id="use1550" transform="rotate(138.33975,5.0060795,14.593416)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(132,4.9843531,15.003434)" id="use1552"
+            <use height="100%" width="100%" transform="rotate(132.33975,5.0024597,15.020168)" id="use1552"
                 inkscape:transform-center-y="6.7383458" inkscape:transform-center-x="-7.4997041" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-8.1629689"
-                inkscape:transform-center-y="5.9174999" id="use1554" transform="rotate(126,4.9778982,15.451644)"
+                inkscape:transform-center-y="5.9174999" id="use1554" transform="rotate(126.33975,4.9986683,15.467147)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(114,4.9638553,16.426756)" id="use1556"
+            <use height="100%" width="100%" transform="rotate(114.33975,4.9904249,16.438991)" id="use1556"
                 inkscape:transform-center-y="4.0910118" inkscape:transform-center-x="-9.2149059" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-9.5920529"
-                inkscape:transform-center-y="3.1053809" id="use1558" transform="rotate(108,4.9561116,16.964459)"
+                inkscape:transform-center-y="3.1053809" id="use1558" transform="rotate(108.33975,4.9858822,16.974548)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(102,4.9477548,17.544731)" id="use1560"
+            <use height="100%" width="100%" transform="rotate(102.33975,4.9809821,17.55223)" id="use1560"
                 inkscape:transform-center-y="2.0857268" inkscape:transform-center-x="-9.8641074" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-10.028089"
-                inkscape:transform-center-y="1.043221" id="use1562" transform="rotate(96,4.9386574,18.176439)"
+                inkscape:transform-center-y="1.043221" id="use1562" transform="rotate(96.339752,4.9756506,18.180795)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(84,4.9175543,19.641792)" id="use1564"
+            <use height="100%" width="100%" transform="rotate(84.339752,4.963294,19.637562)" id="use1564"
                 inkscape:transform-center-y="-1.0645327" inkscape:transform-center-x="-10.025849" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-9.8596524"
-                inkscape:transform-center-y="-2.1066876" id="use1566" transform="rotate(78,4.9050772,20.508173)"
+                inkscape:transform-center-y="-2.1066876" id="use1566" transform="rotate(78.339752,4.9559954,20.498015)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(72,4.8908733,21.494457)" id="use1568"
+            <use height="100%" width="100%" transform="rotate(72.339752,4.9476933,21.476782)" id="use1568"
                 inkscape:transform-center-y="-3.1257612" inkscape:transform-center-x="-9.5854314" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-9.2061904"
-                inkscape:transform-center-y="-4.1105883" id="use1570" transform="rotate(66,4.874461,22.634089)"
+                inkscape:transform-center-y="-4.1105883" id="use1570" transform="rotate(66.339752,4.938109,22.606711)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(54,4.8320209,25.581027)" id="use1572"
+            <use height="100%" width="100%" transform="rotate(54.339752,4.913368,25.523507)" id="use1572"
                 inkscape:transform-center-y="-5.9348367" inkscape:transform-center-x="-8.1503738" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-7.4853659"
-                inkscape:transform-center-y="-6.754271" id="use1574" transform="rotate(48,4.8035674,27.556777)"
+                inkscape:transform-center-y="-6.754271" id="use1574" transform="rotate(48.339752,4.8968152,27.474982)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(42,4.7675217,30.059712)" id="use1576"
+            <use height="100%" width="100%" transform="rotate(42.339752,4.8758853,29.942491)" id="use1576"
                 inkscape:transform-center-y="-7.4997041" inkscape:transform-center-x="-6.7383468" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-5.9175009"
-                inkscape:transform-center-y="-8.1629689" id="use1578" transform="rotate(36,4.7200772,33.354145)"
+                inkscape:transform-center-y="-8.1629689" id="use1578" transform="rotate(36.339752,4.848404,33.18236)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(24,4.5567457,44.695507)" id="use1580"
+            <use height="100%" width="100%" transform="rotate(24.339752,4.7543782,44.267406)" id="use1580"
                 inkscape:transform-center-y="-9.2149059" inkscape:transform-center-x="-4.0910128" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-3.1053819"
-                inkscape:transform-center-y="-9.5920529" id="use1582" transform="rotate(18,4.3952038,55.912612)"
+                inkscape:transform-center-y="-9.5920529" id="use1582" transform="rotate(18.339752,4.6622586,55.127744)"
                 width="100%" height="100%" />
-            <use height="100%" width="100%" transform="rotate(12,4.0738897,78.223924)" id="use1584"
+            <use height="100%" width="100%" transform="rotate(12.339752,4.4815696,76.429833)" id="use1584"
                 inkscape:transform-center-y="-9.8641074" inkscape:transform-center-x="-2.0857278" xlink:href="#use896"
                 y="0" x="0" />
             <use x="0" y="0" xlink:href="#use896" inkscape:transform-center-x="-1.043222"
-                inkscape:transform-center-y="-10.028089" id="use1586" transform="rotate(6,3.1134687,144.91341)"
+                inkscape:transform-center-y="-10.028089" id="use1586" transform="rotate(6.339752,3.9608331,137.82149)"
                 width="100%" height="100%" />
             <use inkscape:transform-center-x="4.9" height="100%" width="100%"
-                transform="rotate(-30,2.8144998,-13.952327)" id="use1590" inkscape:transform-center-y="-8.4870489"
-                xlink:href="#rect1122" y="0" x="0" />
+                transform="rotate(-29.660248,2.6342162,-14.215249)" id="use1590"
+                inkscape:transform-center-y="-8.4870489" xlink:href="#rect1122" y="0" x="0" />
             <use x="0" y="0" xlink:href="#rect1122" inkscape:transform-center-y="-4.8999999" id="use1592"
-                transform="rotate(-60,3.9302763,0.25454013)" width="100%" height="100%"
+                transform="rotate(-59.660248,3.8537558,0.21788094)" width="100%" height="100%"
                 inkscape:transform-center-x="8.4870489" />
             <use inkscape:transform-center-x="9.7999999" height="100%" width="100%"
-                transform="rotate(-90,4.3386787,5.4546141)" id="use1594" xlink:href="#rect1122" y="0" x="0" />
+                transform="rotate(-89.660248,4.2965115,5.4578528)" id="use1594" xlink:href="#rect1122" y="0" x="0" />
             <use inkscape:transform-center-y="4.9" x="0" y="0" xlink:href="#rect1122" id="use1596"
-                transform="rotate(-120,4.57447,8.4568781)" width="100%" height="100%"
+                transform="rotate(-119.66025,4.5512601,8.4727767)" width="100%" height="100%"
                 inkscape:transform-center-x="8.4870488" />
             <use inkscape:transform-center-x="4.8999998" height="100%" width="100%"
-                transform="rotate(-150,4.7470812,10.654688)" id="use1598" xlink:href="#rect1122" y="0" x="0"
+                transform="rotate(-149.66025,4.7373439,10.67506)" id="use1598" xlink:href="#rect1122" y="0" x="0"
                 inkscape:transform-center-y="8.4870489" />
             <use inkscape:transform-center-y="9.7999999" x="0" y="0" xlink:href="#rect1122" id="use1600"
-                transform="rotate(-180,4.8965668,12.558048)" width="100%" height="100%" />
+                transform="rotate(-179.66025,4.8982213,12.57903)" width="100%" height="100%" />
             <use inkscape:transform-center-x="-4.9" height="100%" width="100%"
-                transform="rotate(150,5.0460526,14.461407)" id="use1602" xlink:href="#rect1122" y="0" x="0"
+                transform="rotate(150.33975,5.0588434,14.479975)" id="use1602" xlink:href="#rect1122" y="0" x="0"
                 inkscape:transform-center-y="8.4870488" />
             <use inkscape:transform-center-y="4.8999998" x="0" y="0" xlink:href="#rect1122" id="use1604"
-                transform="rotate(120,5.2186638,16.659216)" width="100%" height="100%"
+                transform="rotate(120.33975,5.2439968,16.671246)" width="100%" height="100%"
                 inkscape:transform-center-x="-8.4870489" />
             <use inkscape:transform-center-x="-9.7999999" height="100%" width="100%"
-                transform="rotate(90,5.4544551,19.66148)" id="use1606" xlink:href="#rect1122" y="0" x="0" />
+                transform="rotate(90.339752,5.4963737,19.658102)" id="use1606" xlink:href="#rect1122" y="0" x="0" />
             <use inkscape:transform-center-y="-4.9" x="0" y="0" xlink:href="#rect1122" id="use1608"
-                transform="rotate(60,5.8628575,24.861555)" width="100%" height="100%"
+                transform="rotate(60.339752,5.9320143,24.813868)" width="100%" height="100%"
                 inkscape:transform-center-x="-8.4870488" />
             <use inkscape:transform-center-x="-4.8999998" height="100%" width="100%"
-                transform="rotate(30,6.978634,39.068421)" id="use1610" xlink:href="#rect1122" y="0" x="0"
+                transform="rotate(30.339752,7.1126716,38.786829)" id="use1610" xlink:href="#rect1122" y="0" x="0"
                 inkscape:transform-center-y="-8.4870489" />
             <use inkscape:transform-center-y="-9.7999998" x="0" y="0" xlink:href="#rect1122" id="use1616"
-                transform="translate(14.206866,-1.1157763)" width="100%" height="100%" />
+                transform="rotate(0.33975201,207.24059,2407.281)" width="100%" height="100%" />
+        </g>
+        <g sodipodi:insensitive="true" style="display:none" inkscape:label="helpers" id="layer4"
+            inkscape:groupmode="layer">
+            <rect transform="matrix(0.99998416,-0.00562992,0.00624555,0.9999805,-0.07094677,0.07120906)"
+                inkscape:transform-center-y="-6.720905" inkscape:transform-center-x="0.0075288582" rx="0.028095985"
+                y="1.5182626" x="-1.9455469" height="0.79993516" width="0.070239276" id="use896"
+                style="fill:#000000;stroke:none;stroke-width:0.273707;stroke-linecap:square;stroke-linejoin:round" />
+            <rect rx="0.25" inkscape:transform-center-y="-9.7999997" transform="translate(-0.07094677,0.07120906)"
+                y="3.1287909" x="-2.3290532" height="0.40000007" width="0.40000001" id="rect1122"
+                style="fill:#000000;stroke:none;stroke-width:0.23094;stroke-linecap:square;stroke-linejoin:round" />
         </g>
         <g transform="translate(0.00506583,0.08697566)" id="g1645-8" style="fill:#000000">
             <g style="font-style:normal;font-weight:normal;font-size:4px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;writing-mode:tb-rl;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.1"
@@ -315,6 +322,20 @@
                     d="m 5.2165346,7.521597 h -0.3232 v -0.5168 c 0.0512,-0.008 0.0656,-0.0272 0.0688,-0.0544 l -0.2752,-0.0272 v 0.5984 h -0.6384 l 0.0128,0.0448 h 0.6256 v 0.8416 h 0.0368 c 0.0832,0 0.1696,-0.0496 0.1696,-0.072 v -0.7696 h 0.6064 c 0.024,0 0.0416,-0.008 0.0464,-0.0256 -0.0784,-0.072 -0.2112,-0.1808 -0.2112,-0.1808 z" />
             </g>
         </g>
+    </g>
+    <g inkscape:label="dials" id="layer3" inkscape:groupmode="layer">
+        <path sodipodi:nodetypes="cccccc" d="M 11.85,2.9910618 12,2.8 12.15,2.9910618 V 14 h -0.3 z"
+            style="fill:#000000;stroke:none;stroke-width:0.4;stroke-linecap:square;stroke-linejoin:round"
+            id="clock-min-hand" />
+        <path id="clock-hour-hand"
+            style="fill:#000000;stroke:none;stroke-width:0.377965;stroke-linecap:square;stroke-linejoin:round"
+            d="M 11.75,8.4 12,8 l 0.25,0.4 0,5.6 h -0.5 z" sodipodi:nodetypes="cccccc" />
+        <path inkscape:transform-center-y="-0.33" sodipodi:nodetypes="cccccccccc"
+            d="M 12,2.77 11.925,2.961016 V 13.27 l -0.125,0.2 v 1.1 h 0.4 v -1.1 l -0.125,-0.2 V 2.961016 Z"
+            style="fill:#ff0000;stroke:none;stroke-width:0.282843;stroke-linecap:square;stroke-linejoin:round"
+            id="clock-second-hand" />
+        <circle r="0.40000001" cy="12" cx="12" id="path1975"
+            style="fill:#999999;stroke:none;stroke-width:0.4;stroke-linecap:square;stroke-linejoin:round" />
     </g>
     <g sodipodi:insensitive="true" style="display:none" inkscape:label="digits" id="layer2" inkscape:groupmode="layer">
         <g style="fill:#ff0000" id="g1645">

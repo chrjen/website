@@ -28,6 +28,8 @@ function clockTick(clock: Clock) {
     let mins = now.getMinutes();
     let secs = now.getSeconds();
 
+    hours = hours + mins / 60;
+
     clock.hourHand.setAttribute("transform", `rotate(${hours/12 * 360}, 12, 12)`);
     clock.minHand.setAttribute("transform", `rotate(${mins/60 * 360}, 12, 12)`);
     clock.secHand.setAttribute("transform", `rotate(${secs/60 * 360}, 12, 12)`);

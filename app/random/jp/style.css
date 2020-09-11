@@ -1,32 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap');
 
+/* CSS-text-4 spec Japanese typography.
+ * https://www.w3.org/TR/css-text-4/#japanese-start-edges
+ */
+
 body {
-    margin: 0;
     writing-mode: vertical-rl;
     text-orientation: upright;
 
     font-family: 'Noto Serif JP', serif;
 
+    margin: 0;
     background-color: bisque;
 }
 
 h1 {
-    font-size: 3em;
+    font-size: 3.5em;
     padding: 0 0 0 0.5em;
     margin: 0;
+    margin-inline-start: 3rem;
 }
 
 time {
-    font-size: 2em;
+    display: inline-block;
+    font-size: 1.2rem;
+    font-weight: 700;
+
+    margin-inline-start: 3rem;
+    margin-block-end: 1.25rem;
+}
+
+time::after {
+    display: block;
+    content: '';
+    width: 2px;
+    height: 200%;
+    margin-right: 0.35em;
+    background-color: bisque;
 }
 
 p {
-    line-height: 1.5em;
-    font-size: 1.25em;
+    word-break: keep-all;
+    line-height: 1.8em;
+    font-size: 2rem;
+
+    text-indent: 1em;
+}
+
+::selection {
+    color: red;
+    background-color: white;
 }
 
 article {
     margin: 1.5em;
-    padding: 2em;
+    padding: 3.5em;
     background-color: burlywood;
+
+    letter-spacing: 0.05em;
+}
+
+.jp-quote {
+    margin-inline-start: -1em;
 }

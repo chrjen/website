@@ -18,12 +18,24 @@ class Snake {
 
     tick() {
         this.forward = this.newForward;
-        
+
         let head = this.body[this.body.length-1];
         head = {
             x: head.x + this.forward.x,
             y: head.y + this.forward.y,
         };
+
+        if (head.x < 0) {
+            head.x = this.board.width - 1;
+        } else if (head.x >= this.board.width) {
+            head.x = 0;
+        }
+
+        if (head.y < 0) {
+            head.y = this.board.height - 1;
+        } else if (head.y >= this.board.height) {
+            head.y = 0;
+        }
 
         this.board.setTile(head.x, head.y, "snake");
         this.board.setTile(this.body[0].x, this.body[0].y, "empty");

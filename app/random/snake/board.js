@@ -21,7 +21,7 @@ class Board {
     spawnApple() {
         let index = Math.floor(random(0, this.tiles.length));
         while (this.tiles[index] != "empty") {
-            index = random(0, this.tiles.length);
+            index = Math.floor(random(0, this.tiles.length));
         }
         this.tiles[index] = "apple";
     }

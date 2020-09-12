@@ -45,6 +45,8 @@ class Snake {
         if (eatTile == "apple") {
             this.grow();
             this.board.spawnApple();
+        } else if (eatTile == "snake") {
+            gameOver();
         }
 
         this.body.push(head);

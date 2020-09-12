@@ -37,8 +37,15 @@ class Snake {
             head.y = 0;
         }
 
+        let eatTile = this.board.getTile(head.x, head.y);
+        
         this.board.setTile(head.x, head.y, "snake");
         this.board.setTile(this.body[0].x, this.body[0].y, "empty");
+        
+        if (eatTile == "apple") {
+            this.grow();
+            this.board.spawnApple();
+        }
 
         this.body.push(head);
 

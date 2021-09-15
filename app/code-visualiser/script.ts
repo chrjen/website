@@ -7,7 +7,11 @@ function onBodyLoad() {
     let editorContainer = document.getElementById("editor-container");
     myCodeMirror = CodeMirror(editorContainer, {
         value:
-`function sleep(duration) {
+`let a = range(0, 60);
+shuffleArray(a);
+a = addGraph(a);
+
+function sleep(duration) {
 	return new Promise(resolve => {
 		setTimeout(() => {
 			resolve()
@@ -32,10 +36,6 @@ k();`,
         indentUnit: 4,
         lineNumbers: true,
     });
-
-    a = range(0, 60);
-    shuffleArray(a);
-    a = addGraph(a);
 }
 
 function runCode() {

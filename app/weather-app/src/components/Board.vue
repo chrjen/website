@@ -4,7 +4,7 @@
       <div class="bg-img" :style="bgImgStyle"></div>
     </div>
 
-    <v-row class="on-top text-center">
+    <v-row class="header on-top text-center">
       <v-col cols="12">
         <h2>Weather now</h2>
       </v-col>
@@ -13,7 +13,9 @@
         <br />
         Temp {{ weatherNow.data.instant.details.air_temperature }}°C
       </v-col>
+    </v-row>
 
+    <v-row>
       <v-col cols="12">
         <h2>Weather predictions</h2>
       </v-col>
@@ -143,8 +145,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-h1 {
+.header {
   color: #fff;
+  box-shadow: black;
+  filter: drop-shadow(0.2em 0.2em 0.2em #00000070);
 }
 .on-top {
   position: relative;

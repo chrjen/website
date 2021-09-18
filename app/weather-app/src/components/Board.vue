@@ -1,6 +1,10 @@
 <template>
   <v-container class="board">
-    <v-row class="text-center">
+    <div class="bg-img-container">
+      <div class="bg-img" :style="bgImgStyle"></div>
+    </div>
+
+    <v-row class="on-top text-center">
       <v-col cols="12">
         <h2>Weather now</h2>
       </v-col>
@@ -9,8 +13,6 @@
         <br />
         Temp {{ weatherNow.data.instant.details.air_temperature }}°C
       </v-col>
-
-      <img :src="bgImg" >
 
       <v-col cols="12">
         <h2>Weather predictions</h2>
@@ -39,19 +41,22 @@ export default Vue.extend({
   },
   watch: {
     weatherNow(weather) {
-      this.$axios.get("https://api.pexels.com/v1/search?query=rain", {
-        headers: {
-          Authorization:
-            "563492ad6f91700001000001059dc5a1a65440e6acce55adc02420b4",
-        },
-        params: {
-          query: weather.data.next_1_hours.summary.symbol_code,
-        }
-      }).then(resp => {
-        const photos = resp.data.photos;
-        const index = Math.floor(Math.random()*photos.length);
-        this.bgImg = photos[index].src.large;
-      })
+      this.$axios
+        .get("https://api.pexels.com/v1/search?query=rain", {
+          headers: {
+            Authorization:
+              "563492ad6f91700001000001059dc5a1a65440e6acce55adc02420b4",
+          },
+          params: {
+            query: weather.data.next_1_hours.summary.symbol_code,
+            size: "small",
+          },
+        })
+        .then((resp) => {
+          const photos = resp.data.photos;
+          const index = Math.floor(Math.random() * photos.length);
+          this.bgImg = photos[index].src.original;
+        });
     },
   },
   data: () => ({
@@ -94,6 +99,13 @@ export default Vue.extend({
     cards: [],
     bgImg: "",
   }),
+  computed: {
+    bgImgStyle() {
+      return {
+        "background-image": 'url("' + this.bgImg + '")',
+      };
+    },
+  },
   mounted() {
     this.$axios
       .get(
@@ -134,7 +146,31 @@ export default Vue.extend({
 h1 {
   color: #fff;
 }
-.board {
-  background-color: #3f51b5;
+.on-top {
+  position: relative;
+  z-index: 5;
+}
+.bg-img-container {
+  box-sizing: border-box;
+  position: absolute;
+  overflow: hidden;
+
+  background-color: black;
+
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+
+  transform: scale(1.03);
+}
+.bg-img {
+  width: 100%;
+  height: 100%;
+
+  filter: blur(4px);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>

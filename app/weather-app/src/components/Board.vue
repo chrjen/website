@@ -6,9 +6,11 @@
       </v-col>
       <v-col cols="12">
         Humidity {{ weatherNow.data.instant.details.relative_humidity }}%
-        <br>
+        <br />
         Temp {{ weatherNow.data.instant.details.air_temperature }}°C
       </v-col>
+
+      <img :src="bgImg" >
 
       <v-col cols="12">
         <h2>Weather predictions</h2>
@@ -35,9 +37,62 @@ export default Vue.extend({
   components: {
     Card,
   },
+  watch: {
+    weatherNow(weather) {
+      this.$axios.get("https://api.pexels.com/v1/search?query=rain", {
+        headers: {
+          Authorization:
+            "563492ad6f91700001000001059dc5a1a65440e6acce55adc02420b4",
+        },
+        params: {
+          query: weather.data.next_1_hours.summary.symbol_code,
+        }
+      }).then(resp => {
+        const photos = resp.data.photos;
+        const index = Math.floor(Math.random()*photos.length);
+        this.bgImg = photos[index].src.large;
+      })
+    },
+  },
   data: () => ({
-    weatherNow: {},
+    weatherNow: {
+      time: "2021-09-15T20:00:00Z",
+      data: {
+        instant: {
+          details: {
+            air_pressure_at_sea_level: 0.0,
+            air_temperature: 0,
+            cloud_area_fraction: 0.0,
+            relative_humidity: 0.0,
+            wind_from_direction: 0.0,
+            wind_speed: 0.0,
+          },
+        },
+        next_12_hours: {
+          summary: {
+            symbol_code: "",
+          },
+        },
+        next_1_hours: {
+          summary: {
+            symbol_code: "",
+          },
+          details: {
+            precipitation_amount: 0.0,
+          },
+        },
+        next_6_hours: {
+          summary: {
+            symbol_code: "",
+          },
+          details: {
+            precipitation_amount: 0.0,
+          },
+        },
+      },
+    },
     cards: [],
+    bgImg: "",
   }),
   mounted() {
     this.$axios

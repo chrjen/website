@@ -5,7 +5,7 @@
     </div>
 
     <div class="on-top">
-      <v-card color="rgba(0, 0, 0, 0.35)" class="header">
+      <v-card color="rgba(20, 20, 30, 0.6)" class="header">
         <v-container>
           <v-row>
             <h2>{{ formatDate(weatherNow.time) }}</h2>
@@ -22,11 +22,52 @@
               />
             </v-col>
             <v-col cols="auto">
-              Humidity {{ weatherNow.data.instant.details.relative_humidity }}%
-              <br />
-              Temp {{ weatherNow.data.instant.details.air_temperature }}°C
-              <br />
-              Summary {{ weatherNow.data.next_1_hours.summary.symbol_code }}
+              <v-row>
+                <v-col>
+                  <span class="stat temp"
+                    >{{
+                      weatherNow.data.instant.details.air_temperature
+                    }}°C</span
+                  >
+                </v-col>
+                <v-col>
+                  <span class="stat humidity"
+                    >(💧{{
+                      weatherNow.data.instant.details.relative_humidity
+                    }}%)</span
+                  >
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="auto">
+                  <svg width="60px" height="60px" viewBox="-50 -50 100 100">
+                    <path
+                      :transform="
+                        asRotTransform(
+                          weatherNow.data.instant.details.wind_from_direction +
+                            180
+                        )
+                      "
+                      fill="#ffffff"
+                      d="M -10 40 L 10 40 L 10 -5 L 30 -5 L 0 -40 L -30 -5 L -10 -5 "
+                    />
+                  </svg>
+                </v-col>
+                <v-col>
+                  <span class="stat wind-direction"
+                    >{{
+                      weatherNow.data.instant.details.wind_from_direction
+                    }}°</span
+                  >
+                </v-col>
+                <v-col>
+                  <span class="stat wind-speed"
+                    >{{
+                      weatherNow.data.instant.details.wind_speed
+                    }}m/s</span
+                  >
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
         </v-container>
@@ -131,6 +172,9 @@ export default Vue.extend({
     formatDate(date: string) {
       return moment(date).format("LL");
     },
+    asRotTransform(angle: number) {
+      return `rotate(${angle})`;
+    },
   },
   mounted() {
     moment.locale(navigator.language);
@@ -179,6 +223,18 @@ export default Vue.extend({
 }
 .header img {
   width: 150px;
+}
+.stat.humidity {
+  font-size: 3rem;
+}
+.stat.temp {
+  font-size: 5rem;
+}
+.stat.wind-direction {
+  font-size: 3rem;
+}
+.stat.wind-speed {
+  font-size: 3rem;
 }
 .on-top {
   position: relative;

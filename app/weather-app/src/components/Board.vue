@@ -4,21 +4,34 @@
       <div class="bg-img" :style="bgImgStyle"></div>
     </div>
 
-    <v-row class="header on-top text-center">
-      <v-col cols="12">
-        <h2>Weather now</h2>
-      </v-col>
-        <img width="100px" :src="weatherIconPath(weatherNow.data.next_1_hours.summary.symbol_code)">
-      <v-col cols="12">
-        Humidity {{ weatherNow.data.instant.details.relative_humidity }}%
-        <br />
-        Temp {{ weatherNow.data.instant.details.air_temperature }}°C
-        <br>
-        Summary {{ weatherNow.data.next_1_hours.summary.symbol_code }}
-      </v-col>
-    </v-row>
+    <div class="on-top">
+      <v-card color="rgba(0, 0, 0, 0.35)" class="header">
+        <v-container>
+          <v-row>
+            <h2>{{ formatDate(weatherNow.time) }}</h2>
+          </v-row>
+          <v-row>
+            <v-col cols="auto">
+              <img
+                class="weather-icon"
+                :src="
+                  weatherIconPath(
+                    weatherNow.data.next_1_hours.summary.symbol_code
+                  )
+                "
+              />
+            </v-col>
+            <v-col cols="auto">
+              Humidity {{ weatherNow.data.instant.details.relative_humidity }}%
+              <br />
+              Temp {{ weatherNow.data.instant.details.air_temperature }}°C
+              <br />
+              Summary {{ weatherNow.data.next_1_hours.summary.symbol_code }}
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
 
-    <v-row>
       <v-col cols="12">
         <h2>Weather predictions</h2>
       </v-col>
@@ -30,7 +43,7 @@
           @click="card.hidden = !card.hidden"
         />
       </v-col>
-    </v-row>
+    </div>
   </v-container>
 </template>
 
@@ -113,10 +126,14 @@ export default Vue.extend({
   },
   methods: {
     weatherIconPath(weather: string) {
-      return `/weathericon/svg/${weather}.svg`
-    }
+      return `/weathericon/svg/${weather}.svg`;
+    },
+    formatDate(date: string) {
+      return moment(date).format("LL");
+    },
   },
   mounted() {
+    moment.locale(navigator.language);
     this.$axios
       .get(
         "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=60.4035&lon=5.3247"
@@ -153,10 +170,15 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.board {
+  max-width: 900px;
+}
 .header {
   color: #fff;
-  box-shadow: black;
-  filter: drop-shadow(0.2em 0.2em 0.2em #00000070);
+  padding: 20px;
+}
+.header img {
+  width: 150px;
 }
 .on-top {
   position: relative;

@@ -1,32 +1,58 @@
 <template>
-  <v-card hover color="indigo lighten-4" width="200" @click="$emit('click')">
+  <v-card
+    class="card"
+    hover
+    color="rgba(20, 20, 30, 0.6)"
+    @click="$emit('click')"
+  >
     <div :class="{ hidden: hidden }">
-      <div>
-        {{ timeFormated }}
-      </div>
-      <div>{{ temp }}°C</div>
+      <v-row>
+        <v-col cols="auto">
+          {{ timeFormated }}
+        </v-col>
+        <v-col cols="auto">
+          <img width="30px" class="weather-icon" :src="weatherIconPath(summary)" />
+        </v-col>
+        <v-col> {{ temp }}°C </v-col>
+      </v-row>
     </div>
   </v-card>
 </template>
 
 <script>
-import moment from 'moment';
+import moment from "moment";
 
 export default {
   props: [
-      "time", "temp", "hidden"
-      ],
+    "time",
+    "temp",
+    "humidity",
+    "wind-direction",
+    "wind-speed",
+    "hidden",
+    "summary",
+  ],
   data: () => ({}),
   computed: {
-      timeFormated() {
-          const m = moment(this.time, true);
-          return m.format('DD/MM HH:mm');
-      }
-  }
+    timeFormated() {
+      return moment(this.time).format("lll");
+    },
+  },
+  methods: {
+    weatherIconPath(weather) {
+      return `/weathericon/svg/${weather}.svg`;
+    },
+  },
 };
 </script>
 
 <style scoped>
+.card {
+  padding: 10px;
+}
+.card * {
+  color: #fff;
+}
 .hidden {
   opacity: 0;
 }

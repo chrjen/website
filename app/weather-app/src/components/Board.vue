@@ -73,13 +73,14 @@
         </v-container>
       </v-card>
 
-      <v-col cols="12">
-        <h2>Weather predictions</h2>
-      </v-col>
-      <v-col v-for="(card, i) in cards" :key="i" cols="4">
+      <v-col v-for="(card, i) in cards" :key="i" cols="12">
         <Card
           :time="card.time"
           :temp="card.temp"
+          :humidity="card.humidity"
+          :wind-direction="card['wind-direction']"
+          :wind-speed="card['wind-speed']"
+          :summary="card.summary"
           :hidden="card.hidden"
           @click="card.hidden = !card.hidden"
         />
@@ -191,7 +192,7 @@ export default Vue.extend({
         const data = resp.data.properties;
 
         let tmp = [];
-        for (let i = 0; i < 18; i++) {
+        for (let i = 0; i < data.timeseries.length; i++) {
           const t = data.timeseries[i];
           const now = moment();
           if (now.isSameOrAfter(t.time, "hour")) {
@@ -201,10 +202,24 @@ export default Vue.extend({
             }
             continue;
           }
+          
+          let summary = ""
+          if (t.data.next_1_hours !== undefined) {
+            summary = t.data.next_1_hours.summary.symbol_code;
+          } else if (t.data.next_6_hours !== undefined) {
+            summary = t.data.next_6_hours.summary.symbol_code
+          } else if (t.data.next_12_hours !== undefined) {
+            summary = t.data.next_12_hours.summary.symbol_code
+          }
+
           tmp.push({
             hidden: false,
             time: t.time,
             temp: t.data.instant.details.air_temperature,
+            humidity: t.data.instant.details.relative_humidity,
+            'wind-direction': t.data.instant.details.wind_from_direction,
+            'wind-speed': t.data.instant.details.wind_speed,
+            summary: summary,
           });
         }
         this.cards = tmp;
@@ -242,7 +257,7 @@ export default Vue.extend({
 }
 .bg-img-container {
   box-sizing: border-box;
-  position: absolute;
+  position: fixed;
   overflow: hidden;
 
   background-color: black;

@@ -8,10 +8,13 @@
       <v-col cols="12">
         <h2>Weather now</h2>
       </v-col>
+        <img width="100px" :src="weatherIconPath(weatherNow.data.next_1_hours.summary.symbol_code)">
       <v-col cols="12">
         Humidity {{ weatherNow.data.instant.details.relative_humidity }}%
         <br />
         Temp {{ weatherNow.data.instant.details.air_temperature }}°C
+        <br>
+        Summary {{ weatherNow.data.next_1_hours.summary.symbol_code }}
       </v-col>
     </v-row>
 
@@ -108,10 +111,15 @@ export default Vue.extend({
       };
     },
   },
+  methods: {
+    weatherIconPath(weather: string) {
+      return `/weathericon/svg/${weather}.svg`
+    }
+  },
   mounted() {
     this.$axios
       .get(
-        "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=60&lon=11"
+        "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=60.4035&lon=5.3247"
       )
       .then((resp) => {
         if (resp.status !== 200) {
@@ -172,7 +180,7 @@ export default Vue.extend({
   width: 100%;
   height: 100%;
 
-  filter: blur(4px);
+  filter: blur(8px);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

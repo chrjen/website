@@ -4,6 +4,16 @@
       <div class="bg-img" :style="bgImgStyle"></div>
     </div>
 
+    <v-btn
+      v-for="(pos, i) in positions"
+      :key="i"
+      @click="position = pos.coords"
+      dark
+      color="rgba(20, 20, 30, 0.6)"
+      class="mb-4 mr-2 on-top"
+      >{{ pos.name }}</v-btn
+    >
+
     <div class="on-top">
       <v-card color="rgba(20, 20, 30, 0.6)" class="header">
         <v-container>
@@ -123,12 +133,31 @@ export default Vue.extend({
           this.bgImg = photos[index].src.original;
         });
     },
+    position() {
+      this.getWeather();
+    },
   },
   data: () => ({
     position: {
       lat: 60.4035,
       lon: 5.3247,
     },
+    positions: [
+      {
+        name: "Bergen",
+        coords: {
+          lat: 60.4035,
+          lon: 5.3247,
+        },
+      },
+      {
+        name: "kanagawa",
+        coords: {
+          lat: 35.4043,
+          lon: 139.3515,
+        },
+      },
+    ],
     weatherNow: {
       time: "2021-09-15T20:00:00Z",
       data: {
@@ -188,21 +217,8 @@ export default Vue.extend({
     isNewDay(previous: string, now: string) {
       return moment(previous).isBefore(now, "day");
     },
-  },
-  mounted() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position.coords.latitude, position.coords.longitude);
-        this.position.lat = position.coords.latitude;
-        this.position.lon = position.coords.longitude;
-      });
-    } else {
-      console.log(
-        "geolocation no available"
-      ); /* geolocation IS NOT available, handle it */
-    }
-    moment.locale(navigator.language);
-    this.$axios
+    getWeather() {
+      this.$axios
       .get("https://api.met.no/weatherapi/locationforecast/2.0/compact", {
         params: {
           lat: this.position.lat.toFixed(4),
@@ -260,6 +276,27 @@ export default Vue.extend({
         }
         this.cards = tmp;
       });
+    }
+  },
+  mounted() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords.latitude, position.coords.longitude);
+        this.positions.push({
+          name: '📍',
+          coords: {
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          }
+        });
+      });
+    } else {
+      console.log(
+        "geolocation no available"
+      ); /* geolocation IS NOT available, handle it */
+    }
+    moment.locale(navigator.language);
+    this.getWeather();
   },
 });
 </script>

@@ -41,7 +41,7 @@ export default {
   data: () => ({}),
   computed: {
     timeFormated() {
-      return moment(this.time).format("lll");
+      return moment(this.time).format("LT");
     },
   },
   methods: {

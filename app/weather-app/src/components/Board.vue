@@ -1,5 +1,5 @@
 <template>
-  <v-container class="board">
+  <v-container class="mt-2 mb-2 board">
     <div class="bg-img-container">
       <div class="bg-img" :style="bgImgStyle"></div>
     </div>
@@ -62,9 +62,7 @@
                 </v-col>
                 <v-col>
                   <span class="stat wind-speed"
-                    >{{
-                      weatherNow.data.instant.details.wind_speed
-                    }}m/s</span
+                    >{{ weatherNow.data.instant.details.wind_speed }}m/s</span
                   >
                 </v-col>
               </v-row>
@@ -73,7 +71,13 @@
         </v-container>
       </v-card>
 
-      <v-col v-for="(card, i) in cards" :key="i" cols="12">
+      <v-col class="pb-0" cols="12" v-for="(card, i) in cards" :key="i">
+        <h2
+          class="mt-4 mb-1"
+          v-if="cards[i - 1] && isNewDay(cards[i - 1].time, card.time)"
+        >
+          {{ formatDate(card.time) }}
+        </h2>
         <Card
           :time="card.time"
           :temp="card.temp"
@@ -171,10 +175,13 @@ export default Vue.extend({
       return `/weathericon/svg/${weather}.svg`;
     },
     formatDate(date: string) {
-      return moment(date).format("LL");
+      return moment(date).format("LL (dddd)");
     },
     asRotTransform(angle: number) {
       return `rotate(${angle})`;
+    },
+    isNewDay(previous: string, now: string) {
+      return moment(previous).isBefore(now, "day");
     },
   },
   mounted() {
@@ -202,14 +209,14 @@ export default Vue.extend({
             }
             continue;
           }
-          
-          let summary = ""
+
+          let summary = "";
           if (t.data.next_1_hours !== undefined) {
             summary = t.data.next_1_hours.summary.symbol_code;
           } else if (t.data.next_6_hours !== undefined) {
-            summary = t.data.next_6_hours.summary.symbol_code
+            summary = t.data.next_6_hours.summary.symbol_code;
           } else if (t.data.next_12_hours !== undefined) {
-            summary = t.data.next_12_hours.summary.symbol_code
+            summary = t.data.next_12_hours.summary.symbol_code;
           }
 
           tmp.push({
@@ -217,8 +224,8 @@ export default Vue.extend({
             time: t.time,
             temp: t.data.instant.details.air_temperature,
             humidity: t.data.instant.details.relative_humidity,
-            'wind-direction': t.data.instant.details.wind_from_direction,
-            'wind-speed': t.data.instant.details.wind_speed,
+            "wind-direction": t.data.instant.details.wind_from_direction,
+            "wind-speed": t.data.instant.details.wind_speed,
             summary: summary,
           });
         }
@@ -238,6 +245,10 @@ export default Vue.extend({
 }
 .header img {
   width: 150px;
+}
+h2 {
+  color: #fff;
+  text-shadow: 2px 2px 8px #000000c0;
 }
 .stat.humidity {
   font-size: 3rem;

@@ -21,28 +21,39 @@
           <v-col align-self="center" cols="auto"> {{ temp }}°C </v-col>
           <v-col
             v-if="precipitation !== 0"
-            class="precipitation"
+            class="ml-n2 mr-n2 precipitation"
             align-self="center"
             cols="auto"
           >
             {{ precipitation }} mm
           </v-col>
+          <v-col align-self="center" cols="auto">
+            <svg class="ma-n1" width="25px" height="25px" viewBox="-50 -50 100 100">
+              <path
+                :transform="asRotTransform(windDirection + 180)"
+                fill="#ffffff"
+                d="M -10 40 L 10 40 L 10 -5 L 30 -5 L 0 -40 L -30 -5 L -10 -5 "
+              />
+            </svg>
+          </v-col>
+          <v-col class="ml-n4" align-self="center" cols="auto"> {{ windSpeed }} m/s </v-col>
         </v-row>
       </div>
     </v-container>
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
 import moment from "moment";
 
-export default {
+export default Vue.extend({
   props: [
     "time",
     "temp",
     "humidity",
-    "wind-direction",
-    "wind-speed",
+    "windDirection",
+    "windSpeed",
     "hidden",
     "precipitation",
     "summary",
@@ -57,8 +68,11 @@ export default {
     weatherIconPath(weather) {
       return `/weathericon/svg/${weather}.svg`;
     },
+    asRotTransform(angle: number) {
+      return `rotate(${angle})`;
+    },
   },
-};
+});
 </script>
 
 <style scoped>

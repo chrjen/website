@@ -8,17 +8,25 @@
     <v-container class="pa-1">
       <div :class="{ hidden: hidden }">
         <v-row>
-          <v-col align-self="center" cols="auto">
+          <v-col class="mr-n2" align-self="center" cols="auto">
             {{ timeFormated }}
           </v-col>
           <v-col align-self="center" cols="auto">
             <img
               width="30px"
-              class="mb-n2 weather-icon"
+              class="ma-n2 weather-icon"
               :src="weatherIconPath(summary)"
             />
           </v-col>
-          <v-col align-self="center"> {{ temp }}°C </v-col>
+          <v-col align-self="center" cols="auto"> {{ temp }}°C </v-col>
+          <v-col
+            v-if="precipitation !== 0"
+            class="precipitation"
+            align-self="center"
+            cols="auto"
+          >
+            {{ precipitation }} mm
+          </v-col>
         </v-row>
       </div>
     </v-container>
@@ -36,6 +44,7 @@ export default {
     "wind-direction",
     "wind-speed",
     "hidden",
+    "precipitation",
     "summary",
   ],
   data: () => ({}),
@@ -63,5 +72,8 @@ export default {
 }
 .hidden {
   opacity: 0;
+}
+.precipitation {
+  color: rgb(81, 182, 223);
 }
 </style>

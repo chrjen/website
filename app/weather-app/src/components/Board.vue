@@ -84,6 +84,7 @@
           :humidity="card.humidity"
           :wind-direction="card['wind-direction']"
           :wind-speed="card['wind-speed']"
+          :precipitation="card.precipitation"
           :summary="card.summary"
           :hidden="card.hidden"
           @click="card.hidden = !card.hidden"
@@ -219,6 +220,15 @@ export default Vue.extend({
             summary = t.data.next_12_hours.summary.symbol_code;
           }
 
+          let precipitation = 0;
+          if (t.data.next_1_hours !== undefined) {
+            precipitation = t.data.next_1_hours.details.precipitation_amount;
+          } else if (t.data.next_6_hours !== undefined) {
+            precipitation = t.data.next_6_hours.details.precipitation_amount;
+          } else if (t.data.next_12_hours !== undefined) {
+            precipitation = t.data.next_12_hours.details.precipitation_amount;
+          }
+
           tmp.push({
             hidden: false,
             time: t.time,
@@ -226,7 +236,8 @@ export default Vue.extend({
             humidity: t.data.instant.details.relative_humidity,
             "wind-direction": t.data.instant.details.wind_from_direction,
             "wind-speed": t.data.instant.details.wind_speed,
-            summary: summary,
+            summary,
+            precipitation
           });
         }
         this.cards = tmp;

@@ -125,6 +125,10 @@ export default Vue.extend({
     },
   },
   data: () => ({
+    position: {
+      lat: 60.4035,
+      lon: 5.3247,
+    },
     weatherNow: {
       time: "2021-09-15T20:00:00Z",
       data: {
@@ -186,11 +190,25 @@ export default Vue.extend({
     },
   },
   mounted() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position.coords.latitude, position.coords.longitude);
+        this.position.lat = position.coords.latitude;
+        this.position.lon = position.coords.longitude;
+      });
+    } else {
+      console.log(
+        "geolocation no available"
+      ); /* geolocation IS NOT available, handle it */
+    }
     moment.locale(navigator.language);
     this.$axios
-      .get(
-        "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=60.4035&lon=5.3247"
-      )
+      .get("https://api.met.no/weatherapi/locationforecast/2.0/compact", {
+        params: {
+          lat: this.position.lat.toFixed(4),
+          lon: this.position.lon.toFixed(4),
+        },
+      })
       .then((resp) => {
         if (resp.status !== 200) {
           console.error(resp.statusText);
@@ -237,7 +255,7 @@ export default Vue.extend({
             "wind-direction": t.data.instant.details.wind_from_direction,
             "wind-speed": t.data.instant.details.wind_speed,
             summary,
-            precipitation
+            precipitation,
           });
         }
         this.cards = tmp;

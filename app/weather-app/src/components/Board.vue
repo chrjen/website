@@ -102,7 +102,7 @@ export default Vue.extend({
   watch: {
     weatherNow(weather) {
       this.$axios
-        .get("https://api.pexels.com/v1/search?query=rain", {
+        .get("https://api.pexels.com/v1/search", {
           headers: {
             Authorization:
               "563492ad6f91700001000001059dc5a1a65440e6acce55adc02420b4",

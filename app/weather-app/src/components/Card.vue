@@ -5,20 +5,20 @@
     color="rgba(20, 20, 30, 0.6)"
     @click="$emit('click')"
   >
-    <v-container>
+    <v-container class="pa-1">
       <div :class="{ hidden: hidden }">
         <v-row>
-          <v-col cols="auto">
+          <v-col align-self="center" cols="auto">
             {{ timeFormated }}
           </v-col>
-          <v-col cols="auto">
+          <v-col align-self="center" cols="auto">
             <img
               width="30px"
-              class="weather-icon"
+              class="mb-n2 weather-icon"
               :src="weatherIconPath(summary)"
             />
           </v-col>
-          <v-col> {{ temp }}°C </v-col>
+          <v-col align-self="center"> {{ temp }}°C </v-col>
         </v-row>
       </div>
     </v-container>
@@ -54,6 +54,8 @@ export default {
 
 <style scoped>
 .card {
+  font-size: 1.15rem;
+  font-weight: 300;
   padding: 10px;
 }
 .card * {

@@ -7,18 +7,33 @@
     <v-btn
       v-for="(pos, i) in positions"
       :key="i"
-      @click="position = pos.coords"
+      @click="index = i"
       dark
       color="rgba(20, 20, 30, 0.6)"
       class="mb-4 mr-2 on-top"
       >{{ pos.name }}</v-btn
     >
+    <v-btn
+      @click="dialog = true"
+      dark
+      fab
+      small
+      color="rgba(20, 20, 30, 0.6)"
+      class="mb-4 ml-2 mr-2 on-top"
+    >
+      <v-icon dark>mdi-plus</v-icon>
+    </v-btn>
 
     <div class="on-top">
       <v-card color="rgba(20, 20, 30, 0.6)" class="header">
         <v-container>
           <v-row>
-            <h2>{{ formatDate(weatherNow.time) }}</h2>
+            <h1>{{ positions[index].name }}</h1>
+          </v-row>
+          <v-row>
+            <h2 class="no-shadow">
+              {{ formatDate(weatherNow.time) }}
+            </h2>
           </v-row>
           <v-row>
             <v-col cols="auto">
@@ -101,6 +116,45 @@
         />
       </v-col>
     </div>
+
+    <v-dialog v-model="dialog" max-width="500px">
+      <v-card>
+        <v-card-title> New position </v-card-title>
+        <v-card-text>
+          <v-form v-model="valid">
+            <v-text-field
+              v-model="newname"
+              :rules="nameRules"
+              label="Name"
+            >
+            </v-text-field>
+            <v-text-field
+              v-model="newlat"
+              :rules="numberRules"
+              label="Latitude"
+            >
+            </v-text-field>
+            <v-text-field
+              v-model="newlon"
+              :rules="numberRules"
+              label="Longtitude"
+            >
+            </v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="dialog = false"> Close </v-btn>
+          <v-btn
+            color="primary"
+            :disabled="!valid"
+            text
+            @click="addPosition(); dialog = false"
+          >
+            Add
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -133,15 +187,20 @@ export default Vue.extend({
           this.bgImg = photos[index].src.original;
         });
     },
-    position() {
+    index() {
       this.getWeather();
     },
   },
   data: () => ({
-    position: {
-      lat: 60.4035,
-      lon: 5.3247,
-    },
+    dialog: false,
+    valid: false,
+    newlat: 0.0,
+    newlon: 0.0,
+    newname: "",
+    numberRules: [(v: any) => !isNaN(v) || "Not a valid number"],
+    nameRules: [(v: any) => !!v || "Name cannot be empty"],
+
+    index: 0,
     positions: [
       {
         name: "Bergen",
@@ -217,77 +276,89 @@ export default Vue.extend({
     isNewDay(previous: string, now: string) {
       return moment(previous).isBefore(now, "day");
     },
+    addPosition() {
+      this.positions.push({
+        name: this.newname,
+        coords: {
+          lat: Number(this.newlat),
+          lon: Number(this.newlon),
+        }
+      })
+
+      this.newname = "";
+      this.newlat = 0.0;
+      this.newlon = 0.0;
+    },
     getWeather() {
       this.$axios
-      .get("https://api.met.no/weatherapi/locationforecast/2.0/compact", {
-        params: {
-          lat: this.position.lat.toFixed(4),
-          lon: this.position.lon.toFixed(4),
-        },
-      })
-      .then((resp) => {
-        if (resp.status !== 200) {
-          console.error(resp.statusText);
-          return;
-        }
+        .get("https://api.met.no/weatherapi/locationforecast/2.0/compact", {
+          params: {
+            lat: this.positions[this.index].coords.lat.toFixed(4),
+            lon: this.positions[this.index].coords.lon.toFixed(4),
+          },
+        })
+        .then((resp) => {
+          if (resp.status !== 200) {
+            console.error(resp.statusText);
+            return;
+          }
 
-        const data = resp.data.properties;
+          const data = resp.data.properties;
 
-        let tmp = [];
-        for (let i = 0; i < data.timeseries.length; i++) {
-          const t = data.timeseries[i];
-          const now = moment();
-          if (now.isSameOrAfter(t.time, "hour")) {
-            if (now.isSame(t.time, "hour")) {
-              console.log("Now", t);
-              this.weatherNow = t;
+          let tmp = [];
+          for (let i = 0; i < data.timeseries.length; i++) {
+            const t = data.timeseries[i];
+            const now = moment();
+            if (now.isSameOrAfter(t.time, "hour")) {
+              if (now.isSame(t.time, "hour")) {
+                console.log("Now", t);
+                this.weatherNow = t;
+              }
+              continue;
             }
-            continue;
-          }
 
-          let summary = "";
-          if (t.data.next_1_hours !== undefined) {
-            summary = t.data.next_1_hours.summary.symbol_code;
-          } else if (t.data.next_6_hours !== undefined) {
-            summary = t.data.next_6_hours.summary.symbol_code;
-          } else if (t.data.next_12_hours !== undefined) {
-            summary = t.data.next_12_hours.summary.symbol_code;
-          }
+            let summary = "";
+            if (t.data.next_1_hours !== undefined) {
+              summary = t.data.next_1_hours.summary.symbol_code;
+            } else if (t.data.next_6_hours !== undefined) {
+              summary = t.data.next_6_hours.summary.symbol_code;
+            } else if (t.data.next_12_hours !== undefined) {
+              summary = t.data.next_12_hours.summary.symbol_code;
+            }
 
-          let precipitation = 0;
-          if (t.data.next_1_hours !== undefined) {
-            precipitation = t.data.next_1_hours.details.precipitation_amount;
-          } else if (t.data.next_6_hours !== undefined) {
-            precipitation = t.data.next_6_hours.details.precipitation_amount;
-          } else if (t.data.next_12_hours !== undefined) {
-            precipitation = t.data.next_12_hours.details.precipitation_amount;
-          }
+            let precipitation = 0;
+            if (t.data.next_1_hours !== undefined) {
+              precipitation = t.data.next_1_hours.details.precipitation_amount;
+            } else if (t.data.next_6_hours !== undefined) {
+              precipitation = t.data.next_6_hours.details.precipitation_amount;
+            } else if (t.data.next_12_hours !== undefined) {
+              precipitation = t.data.next_12_hours.details.precipitation_amount;
+            }
 
-          tmp.push({
-            hidden: false,
-            time: t.time,
-            temp: t.data.instant.details.air_temperature,
-            humidity: t.data.instant.details.relative_humidity,
-            "wind-direction": t.data.instant.details.wind_from_direction,
-            "wind-speed": t.data.instant.details.wind_speed,
-            summary,
-            precipitation,
-          });
-        }
-        this.cards = tmp;
-      });
-    }
+            tmp.push({
+              hidden: false,
+              time: t.time,
+              temp: t.data.instant.details.air_temperature,
+              humidity: t.data.instant.details.relative_humidity,
+              "wind-direction": t.data.instant.details.wind_from_direction,
+              "wind-speed": t.data.instant.details.wind_speed,
+              summary,
+              precipitation,
+            });
+          }
+          this.cards = tmp;
+        });
+    },
   },
   mounted() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position.coords.latitude, position.coords.longitude);
         this.positions.push({
-          name: '📍',
+          name: "📍",
           coords: {
             lat: position.coords.latitude,
             lon: position.coords.longitude,
-          }
+          },
         });
       });
     } else {
@@ -312,9 +383,17 @@ export default Vue.extend({
 .header img {
   width: 150px;
 }
+h1 {
+  font-weight: 300;
+  font-size: 3rem;
+  text-transform: uppercase;
+}
 h2 {
   color: #fff;
   text-shadow: 2px 2px 8px #000000c0;
+}
+h2.no-shadow {
+  text-shadow: none;
 }
 .stat.humidity {
   font-size: 3rem;

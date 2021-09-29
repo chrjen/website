@@ -7,12 +7,18 @@
     <v-btn
       v-for="(pos, i) in positions"
       :key="i"
-      @click="index = i"
+      @click="position = pos"
       dark
       color="rgba(20, 20, 30, 0.6)"
       class="mb-4 mr-2 on-top"
-      >{{ pos.name }}</v-btn
-    >
+      >{{ pos.name }}</v-btn>
+    <v-btn
+      @click="position = geoposition"
+      dark
+      color="rgba(20, 20, 30, 0.6)"
+      class="mb-4 mr-2 on-top"
+      :show="geoposition.active"
+      >📍</v-btn>
     <v-btn
       @click="dialog = true"
       dark
@@ -28,7 +34,7 @@
       <v-card color="rgba(20, 20, 30, 0.6)" class="header">
         <v-container>
           <v-row>
-            <h1>{{ positions[index].name }}</h1>
+            <h1>{{ position.name }}</h1>
           </v-row>
           <v-row>
             <h2 class="no-shadow">
@@ -187,8 +193,11 @@ export default Vue.extend({
           this.bgImg = photos[index].src.original;
         });
     },
-    index() {
+    position() {
       this.getWeather();
+    },
+    positions() {
+      localStorage.setItem("weatherLocs", JSON.stringify(this.positions));
     },
   },
   data: () => ({
@@ -200,7 +209,21 @@ export default Vue.extend({
     numberRules: [(v: any) => !isNaN(v) || "Not a valid number"],
     nameRules: [(v: any) => !!v || "Name cannot be empty"],
 
-    index: 0,
+    position: {
+        name: "Null island",
+        coords: {
+          lat: 0.0,
+          lon: 0.0,
+        },
+      },
+    geoposition: {
+        active: false,
+        name: "Null island",
+        coords: {
+          lat: 0.0,
+          lon: 0.0,
+        },
+      },
     positions: [
       {
         name: "Bergen",
@@ -293,8 +316,8 @@ export default Vue.extend({
       this.$axios
         .get("https://api.met.no/weatherapi/locationforecast/2.0/compact", {
           params: {
-            lat: this.positions[this.index].coords.lat.toFixed(4),
-            lon: this.positions[this.index].coords.lon.toFixed(4),
+            lat: this.position.coords.lat.toFixed(4),
+            lon: this.position.coords.lon.toFixed(4),
           },
         })
         .then((resp) => {
@@ -350,16 +373,24 @@ export default Vue.extend({
         });
     },
   },
+  created() {
+    const localPositions = localStorage.getItem("weatherLocs");
+    if (localPositions) {
+      this.positions = JSON.parse(localPositions);
+    }
+    this.position = this.positions[0];
+  },
   mounted() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        this.positions.push({
+        this.geoposition = {
+          active: true,
           name: "📍",
           coords: {
             lat: position.coords.latitude,
             lon: position.coords.longitude,
           },
-        });
+        };
       });
     } else {
       console.log(

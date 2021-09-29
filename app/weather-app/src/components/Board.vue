@@ -11,14 +11,24 @@
       dark
       color="rgba(20, 20, 30, 0.6)"
       class="mb-4 mr-2 on-top"
-      >{{ pos.name }}</v-btn>
+    >
+      {{ pos.name }}
+      <v-btn
+      v-if="positions.length > 1"
+      @click="positions.splice(i, 1)"
+      class="mr-n3"
+      icon
+        ><v-icon>mdi-close-circle</v-icon></v-btn
+      >
+    </v-btn>
     <v-btn
       @click="position = geoposition"
       dark
       color="rgba(20, 20, 30, 0.6)"
       class="mb-4 mr-2 on-top"
       :show="geoposition.active"
-      >📍</v-btn>
+      >📍</v-btn
+    >
     <v-btn
       @click="dialog = true"
       dark
@@ -128,11 +138,7 @@
         <v-card-title> New position </v-card-title>
         <v-card-text>
           <v-form v-model="valid">
-            <v-text-field
-              v-model="newname"
-              :rules="nameRules"
-              label="Name"
-            >
+            <v-text-field v-model="newname" :rules="nameRules" label="Name">
             </v-text-field>
             <v-text-field
               v-model="newlat"
@@ -154,7 +160,10 @@
             color="primary"
             :disabled="!valid"
             text
-            @click="addPosition(); dialog = false"
+            @click="
+              addPosition();
+              dialog = false;
+            "
           >
             Add
           </v-btn>
@@ -210,20 +219,20 @@ export default Vue.extend({
     nameRules: [(v: any) => !!v || "Name cannot be empty"],
 
     position: {
-        name: "Null island",
-        coords: {
-          lat: 0.0,
-          lon: 0.0,
-        },
+      name: "Null island",
+      coords: {
+        lat: 0.0,
+        lon: 0.0,
       },
+    },
     geoposition: {
-        active: false,
-        name: "Null island",
-        coords: {
-          lat: 0.0,
-          lon: 0.0,
-        },
+      active: false,
+      name: "Null island",
+      coords: {
+        lat: 0.0,
+        lon: 0.0,
       },
+    },
     positions: [
       {
         name: "Bergen",
@@ -305,8 +314,8 @@ export default Vue.extend({
         coords: {
           lat: Number(this.newlat),
           lon: Number(this.newlon),
-        }
-      })
+        },
+      });
 
       this.newname = "";
       this.newlat = 0.0;

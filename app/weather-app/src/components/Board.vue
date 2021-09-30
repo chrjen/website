@@ -306,7 +306,16 @@ export default Vue.extend({
         },
       },
     },
-    cards: [],
+    cards: [] as {
+      hidden: boolean;
+      time: any;
+      temp: any;
+      humidity: any;
+      "wind-direction": any;
+      "wind-speed": any;
+      summary: string;
+      precipitation: number;
+    }[],
     bgImg: "",
     bgUrl: "",
     bgPhotographer: "",

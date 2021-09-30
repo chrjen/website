@@ -65,7 +65,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    weatherIconPath(weather) {
+    weatherIconPath(weather: string) {
       return `/weathericon/svg/${weather}.svg`;
     },
     asRotTransform(angle: number) {

@@ -330,7 +330,7 @@ export default Vue.extend({
   },
   methods: {
     weatherIconPath(weather: string) {
-      return `/weathericon/svg/${weather}.svg`;
+      return `${process.env.BASE_URL}weathericon/svg/${weather}.svg`;
     },
     formatDate(date: string) {
       return moment(date).format("LL (dddd)");

@@ -358,8 +358,8 @@ export default Vue.extend({
       this.$axios
         .get("https://api.met.no/weatherapi/locationforecast/2.0/compact", {
           params: {
-            lat: this.position.coords.lat.toFixed(4),
-            lon: this.position.coords.lon.toFixed(4),
+            lat: this.position.coords.lat.toFixed(1),
+            lon: this.position.coords.lon.toFixed(1),
           },
         })
         .then((resp) => {

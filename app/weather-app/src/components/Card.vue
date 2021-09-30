@@ -28,7 +28,12 @@
             {{ precipitation }} mm
           </v-col>
           <v-col align-self="center" cols="auto">
-            <svg class="ma-n1" width="25px" height="25px" viewBox="-50 -50 100 100">
+            <svg
+              class="ma-n1"
+              width="25px"
+              height="25px"
+              viewBox="-50 -50 100 100"
+            >
               <path
                 :transform="asRotTransform(windDirection + 180)"
                 fill="#ffffff"
@@ -36,7 +41,9 @@
               />
             </svg>
           </v-col>
-          <v-col class="ml-n4" align-self="center" cols="auto"> {{ windSpeed }} m/s </v-col>
+          <v-col class="ml-n4" align-self="center" cols="auto">
+            {{ windSpeed }} m/s
+          </v-col>
         </v-row>
       </div>
     </v-container>

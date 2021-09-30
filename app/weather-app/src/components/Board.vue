@@ -26,7 +26,7 @@
       dark
       color="rgba(20, 20, 30, 0.6)"
       class="mb-4 mr-2 on-top"
-      :show="geoposition.active"
+      v-if="geoposition.active"
       >📍</v-btn
     >
     <v-btn

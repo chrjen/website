@@ -40,7 +40,7 @@
       <v-icon dark>mdi-plus</v-icon>
     </v-btn>
 
-    <div class="on-top">
+    <div class="mb-4 on-top">
       <v-card color="rgba(20, 20, 30, 0.6)" class="header">
         <v-container>
           <v-row>

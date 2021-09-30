@@ -14,11 +14,11 @@
     >
       {{ pos.name }}
       <v-btn
-      v-if="positions.length > 1"
-      @click="positions.splice(i, 1)"
-      class="mr-n3"
-      icon
-        ><v-icon>mdi-close-circle</v-icon></v-btn
+        v-if="positions.length > 1"
+        @click="positions.splice(i, 1)"
+        class="mr-n3"
+        icon
+        ><v-icon small>mdi-close-circle</v-icon></v-btn
       >
     </v-btn>
     <v-btn
@@ -132,6 +132,24 @@
         />
       </v-col>
     </div>
+    <footer class="mt-4">
+      <div>
+        Background
+        <a :href="this.bgUrl">Photo</a>
+        was taken by
+        <a :href="bgPhotographerUrl">
+          {{ bgPhotographer }}
+        </a>
+        on Pexels.
+      </div>
+
+      <a href="https://www.pexels.com">
+        <img
+          height="30px"
+          src="https://images.pexels.com/lib/api/pexels-white.png"
+        />
+      </a>
+    </footer>
 
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
@@ -199,7 +217,10 @@ export default Vue.extend({
         .then((resp) => {
           const photos = resp.data.photos;
           const index = Math.floor(Math.random() * photos.length);
-          this.bgImg = photos[index].src.original;
+          this.bgImg = photos[index].src.medium;
+          this.bgUrl = photos[index].url;
+          this.bgPhotographer = photos[index].photographer;
+          this.bgPhotographerUrl = photos[index].photographer_url;
         });
     },
     position() {
@@ -287,6 +308,9 @@ export default Vue.extend({
     },
     cards: [],
     bgImg: "",
+    bgUrl: "",
+    bgPhotographer: "",
+    bgPhotographerUrl: "",
   }),
   computed: {
     bgImgStyle() {
@@ -422,6 +446,22 @@ export default Vue.extend({
 }
 .header img {
   width: 150px;
+}
+img {
+  display: block;
+}
+footer {
+  position: absolute;
+  left: 0;
+  width: 100vw;
+  height: 60px;
+  padding: 10px;
+  background-color: #20202a;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 16px;
 }
 h1 {
   font-weight: 300;

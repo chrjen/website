@@ -1,5 +1,5 @@
 const G = {
-    r: 200,
+    r: 40,
     _n: 7,
     _g: 3,
     a: 0,
@@ -7,19 +7,21 @@ const G = {
     colours: [],
 
     set n(value) {
+        this._n = value;
         sliderN.value(value);
         inputN.value(value);
-        this._n = value;
+        updateUrlParams();
     },
-
+    
     get n() {
         return this._n;
     },
-
+    
     set g(value) {
+        this._g = value;
         sliderG.value(value);
         inputG.value(value);
-        this._g = value;
+        updateUrlParams();
     },
 
     get g() {
@@ -82,6 +84,15 @@ function setup() {
     sliderN.input(updateN.bind(sliderN));
     inputN.elt.onblur = updateN.bind(inputN);
     inputN.elt.onchange = updateN.bind(inputN);
+
+    // Read URL parameters
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('n')) {
+        G.n = Number(params.get('n'));
+    }
+    if (params.get('g')) {
+        G.g = Number(params.get('g'));
+    }
 }
 
 function draw() {
@@ -108,6 +119,13 @@ function draw() {
     G.a += G.da / 7;
 
     // noLoop();
+}
+
+function updateUrlParams() {
+    const params = new URLSearchParams();
+    params.set('n', G.n);
+    params.set('g', G.g);
+    window.history.replaceState({}, '', "?" + params.toString());
 }
 
 function calcPoints() {

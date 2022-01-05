@@ -1,17 +1,40 @@
 const G = {
-    r: 250,
-    n: 7.3,
-    g: 3,
+    r: 200,
+    _n: 7,
+    _g: 3,
     a: 0,
     da: 0.1,
     colours: [],
+
+    set n(value) {
+        sliderN.value(value);
+        inputN.value(value);
+        this._n = value;
+    },
+
+    get n() {
+        return this._n;
+    },
+
+    set g(value) {
+        sliderG.value(value);
+        inputG.value(value);
+        this._g = value;
+    },
+
+    get g() {
+        return this._g;
+    },
+
     get ng() {
         let ng = this.n - this.g;
         return ng < 0 ? -ng : ng;
     },
+
     get rr() {
         return (this.g / this.n) * this.r;
     },
+
     get rrr() {
         return 0.8 * this.rr;
     },
@@ -35,20 +58,37 @@ function setup() {
         color(200, 80, 40),
     ];
 
-    sliderN = createSlider(-12, 12, 7.5);
+    sliderN = createSlider(-12, 12, G.n, 0.1);
+    inputN = createInput(String(G.n), 'number');
     sliderN.position(10, 10);
-    sliderG = createSlider(-12, 12, 3);
+    sliderN.size(120);
+    inputN.position(140, 10);
+    inputN.size(60);
+    
+    sliderG = createSlider(-12, 12, G.g, 1);
+    inputG = createInput(String(G.g), 'number');
     sliderG.position(10, 40);
+    sliderG.size(120);
+    inputG.position(140, 40);
+    inputG.size(60);
+
+    let updateG = function() { G.g = Number(this.value()); }
+    let updateN = function() { G.n = Number(this.value()); }
+
+    sliderG.input(updateG.bind(sliderG));
+    inputG.elt.onblur = updateG.bind(inputG);
+    inputG.elt.onchange = updateG.bind(inputG);
+
+    sliderN.input(updateN.bind(sliderN));
+    inputN.elt.onblur = updateN.bind(inputN);
+    inputN.elt.onchange = updateN.bind(inputN);
 }
 
 function draw() {
+    push();
+    
     background(255);
     translate(width / 2, height / 2);
-
-    // G.n = sliderN.value();
-    // G.g = sliderG.value();
-
-    console.log(G.n, G.g);
 
     calcPoints();
 
@@ -58,6 +98,12 @@ function draw() {
     drawPrimaryPolygons();
     drawSecondaryPolygons();
     drawPoints();
+
+    pop();
+
+    textSize(48);
+    textAlign(RIGHT);
+    text(`{${G.n}/${G.g}}`, 700, 60);
 
     G.a += G.da / 7;
 

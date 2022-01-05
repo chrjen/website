@@ -1,21 +1,54 @@
-let r = 360; // Radius
-let n = 7; // Number of points 
-let g = 3; // Points to skip
-let rr = (g / n) * r;
-let rrr = 0.8 * rr;
-let a = 0;
-let da = 0.1;
+const G = {
+    r: 250,
+    n: 7.3,
+    g: 3,
+    a: 0,
+    da: 0.1,
+    colours: [],
+    get ng() {
+        let ng = this.n - this.g;
+        return ng < 0 ? -ng : ng;
+    },
+    get rr() {
+        return (this.g / this.n) * this.r;
+    },
+    get rrr() {
+        return 0.8 * this.rr;
+    },
+}
 
 let primaryPts = [];
 let secondaryPts = [];
 
+let sliderN;
+let sliderG;
+
+
 function setup() {
     createCanvas(800, 800);
+
+    G.colours = [
+        color(50, 200, 50),
+        color(40, 175, 200),
+        color(185, 40, 200),
+        color(160, 200, 40),
+        color(200, 80, 40),
+    ];
+
+    sliderN = createSlider(-12, 12, 7.5);
+    sliderN.position(10, 10);
+    sliderG = createSlider(-12, 12, 3);
+    sliderG.position(10, 40);
 }
 
 function draw() {
     background(255);
     translate(width / 2, height / 2);
+
+    // G.n = sliderN.value();
+    // G.g = sliderG.value();
+
+    console.log(G.n, G.g);
 
     calcPoints();
 
@@ -26,39 +59,41 @@ function draw() {
     drawSecondaryPolygons();
     drawPoints();
 
-    a += da / 7;
+    G.a += G.da / 7;
+
+    // noLoop();
 }
 
 function calcPoints() {
     primaryPts = [];
-    secondaryPts =  [];
+    secondaryPts = [];
 
-    for (let i = 0; i < n-g; i++) {
+    for (let i = 0; i < G.ng; i++) {
 
-        let v1 = createVector(r - rr, 0);
-        v1.rotate(i * TAU / (n-g));
-        let v2 = createVector(rrr, 0);
+        let v1 = createVector(G.r - G.rr, 0);
+        v1.rotate(i * TAU / (G.ng));
+        let v2 = createVector(G.rrr, 0);
 
-        
-        v1.rotate(-a);
+
+        v1.rotate(-G.a);
         stroke(220, 180, 0);
         strokeWeight(2);
         primaryPts.push({
             x: v1.x,
             y: v1.y,
         });
-        
+
         stroke(255, 0, 0);
         strokeWeight(10);
-        
-        v2.rotate((r / rr - 1) * a);
-        for (let j = 0; j < g; j++) {
+
+        v2.rotate((G.r / G.rr - 1) * G.a);
+        for (let j = 0; j < G.g; j++) {
             v3 = v1.copy().add(v2);
             secondaryPts.push({
                 x: v3.x,
                 y: v3.y,
             });
-            v2.rotate(TAU / g);
+            v2.rotate(TAU / G.g);
         }
     }
 }
@@ -67,30 +102,37 @@ function boundingCircle() {
     noFill();
     stroke(0, 0, 0);
     strokeWeight(3);
-    circle(0, 0, 2 * r);
+    circle(0, 0, 2 * G.r);
 }
 
 function drawGraph() {
+    const period = swm(G.n) * TAU * G.g;
+    let count = gcd(G.n, G.g);
+
     noFill();
-    stroke(50, 200, 50);
     strokeWeight(3);
-    beginShape();
-    let v1 = createVector(r - rr, 0);
-    let v2 = createVector(rrr, 0);
-    for (let a = 0; a < TAU * g; a += da) {
-        v1.rotate(-da);
-        v2.rotate((r / rr - 1) * da);
-        let v3 = v1.copy().add(v2);
-        vertex(v3.x, v3.y);
+    for (let i = 0; i < count; i++) {
+
+        stroke(G.colours[i % G.colours.length]);
+        beginShape();
+        let v1 = createVector(G.r - G.rr, 0);
+        let v2 = createVector(G.rrr, 0);
+        v1.rotate(i * TAU / G.ng);
+        for (let a = 0; a < period; a += G.da) {
+            v1.rotate(-G.da);
+            v2.rotate((G.r / G.rr - 1) * G.da);
+            let v3 = v1.copy().add(v2);
+            vertex(v3.x, v3.y);
+        }
+        endShape();
     }
-    endShape();
 }
 
 function drawCircles() {
     stroke(255, 200, 0);
     strokeWeight(3);
     for (p of primaryPts) {
-        circle(p.x, p.y, 2*rr);
+        circle(p.x, p.y, 2 * G.rr);
     }
 }
 
@@ -103,12 +145,16 @@ function drawPoints() {
 }
 
 function drawPrimaryPolygons() {
+    if (primaryPts.length == 0) {
+        return;
+    }
+
     stroke(0, 100, 255);
     strokeWeight(2);
-    for (let i = 0; i < n-g; i++) {
+    for (let i = 0; i < G.ng; i++) {
         beginShape();
-        for (let j = 0; j < g+1; j++) {
-            const p = secondaryPts[i * g + j%g];
+        for (let j = 0; j < G.g + 1; j++) {
+            const p = secondaryPts[i * G.g + j % G.g];
             vertex(p.x, p.y);
         }
         endShape();
@@ -116,15 +162,40 @@ function drawPrimaryPolygons() {
 }
 
 function drawSecondaryPolygons() {
+    if (secondaryPts.length == 0) {
+        return;
+    }
+
     stroke(0, 200, 255);
     strokeWeight(2);
-    for (let i = 0; i < g; i++) {
+    for (let i = 0; i < G.g; i++) {
         beginShape();
-        for (let j = 0; j < n-g+1; j++) {
-            const p = secondaryPts[(j*g + i)%secondaryPts.length];
+        for (let j = 0; j < G.ng + 1; j++) {
+            const p = secondaryPts[(j * G.g + i) % secondaryPts.length];
             vertex(p.x, p.y);
         }
         endShape();
     }
+}
+
+function gcd(a, b) {
+    function _gcd(a, b) {
+        return !b ? a : _gcd(b, a % b);
+    }
+
+    const A = new Fraction(a);
+    const B = new Fraction(b);
+    return _gcd(A.numerator * B.denominator, B.numerator * A.denominator);
+}
+
+// Smallest whole number multiple.
+// Returns the smallest whole number that when
+// multiplied with n still produces a whole number.
+function swm(n) {
+    let c = 1;
+    while (c * n % 1 != 0) {
+        c *= 10;
+    }
+    return c / gcd(n * c, c);
 }
 

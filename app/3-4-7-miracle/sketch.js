@@ -62,6 +62,7 @@ let inputN;
 let inputG;
 let inputSize;
 let inputRadius;
+let inputSpeed;
 let inputResolution;
 
 
@@ -99,6 +100,9 @@ function setup() {
     inputRadius = new SliderInput("radius", 0, 1, G.rrf, 0.01);
     inputRadius.onchange = function(value) { G.rrf = Number(value); };
 
+    inputSpeed = new SliderInput("speed", 0, 1, G.da, 0.01);
+    inputSpeed.onchange = function(value) { G.da = Number(value); };
+
     inputResolution = new SliderInput("res", 100, 15000, G.nSegments, 100);
     inputResolution.onchange = function(value) { G.nSegments = Number(value); };
 
@@ -122,6 +126,13 @@ function draw() {
     background(255);
     if (!isMobile) {
         translate(width / 2, height / 2);
+    }
+
+    if (G.g === 0) {
+        textSize(62);
+        textAlign(CENTER);
+        text("g == 0", 0, 0);
+        return;
     }
 
     calcPoints();

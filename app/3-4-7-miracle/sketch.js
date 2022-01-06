@@ -7,8 +7,8 @@ const G = {
     colours: [],
 
     get r() {
-        const w = window.innerWidth/2 * 0.8;
-        const h = window.innerHeight/2 * 0.8;
+        const w = window.innerWidth / 2 * 0.8;
+        const h = window.innerHeight / 2 * 0.8;
         return w < h ? w : h;
     },
 
@@ -19,11 +19,11 @@ const G = {
         inputN.value(value);
         updateUrlParams();
     },
-    
+
     get n() {
         return this._n;
     },
-    
+
     set g(value) {
         value = Math.round(value * 100) / 100;
         this._g = value;
@@ -50,16 +50,26 @@ const G = {
     },
 }
 
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 let primaryPts = [];
 let secondaryPts = [];
 
 let sliderN;
 let sliderG;
 
-let nSegments = 5000;
+let nSegments = 1000;
+
+
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    div = createDiv("Hello");
+
+    if (isMobile) {
+        createCanvas(windowWidth, windowHeight, WEBGL);
+    } else {
+        createCanvas(windowWidth, windowHeight);
+    }
 
     G.colours = [
         color(50, 200, 50),
@@ -75,20 +85,28 @@ function setup() {
 
     sliderN = createSlider(-12, 12, G.n, 0.25);
     inputN = createInput(String(G.n), 'number');
-    sliderN.position(10, 10);
+    createDiv("n").
+        position(10, 10).
+        style('text-align', 'right').
+        style('width', '40px');
+    sliderN.position(60, 10);
     sliderN.size(150);
-    inputN.position(170, 10);
+    inputN.position(220, 10);
     inputN.size(60);
-    
+
     sliderG = createSlider(-12, 12, G.g, 1);
     inputG = createInput(String(G.g), 'number');
-    sliderG.position(10, 40);
+    createDiv("g").
+        position(10, 40).
+        style('text-align', 'right').
+        style('width', '40px');
+    sliderG.position(60, 40);
     sliderG.size(150);
-    inputG.position(170, 40);
+    inputG.position(220, 40);
     inputG.size(60);
 
-    let updateG = function() { G.g = Number(this.value()); }
-    let updateN = function() { G.n = Number(this.value()); }
+    let updateG = function () { G.g = Number(this.value()); }
+    let updateN = function () { G.n = Number(this.value()); }
 
     sliderG.input(updateG.bind(sliderG));
     inputG.elt.onblur = updateG.bind(inputG);
@@ -117,11 +135,13 @@ function draw() {
     // if (keyIsPressed) {
     //     G.n = Math.ceil((G.n + 0.01)*100) / 100;
     // }
-    
+
     push();
-    
+
     background(255);
-    translate(width / 2, height / 2);
+    if (!isMobile) {
+        translate(width / 2, height / 2);
+    }
 
     calcPoints();
 
@@ -234,7 +254,7 @@ function drawPrimaryPolygons() {
     if (primaryPts.length == 0) {
         return;
     }
-    
+
     noFill();
     stroke(0, 100, 255);
     strokeWeight(2);
@@ -255,7 +275,7 @@ function drawSecondaryPolygons() {
     if (secondaryPts.length == 0) {
         return;
     }
-    
+
     noFill();
     stroke(0, 200, 255);
     strokeWeight(2);

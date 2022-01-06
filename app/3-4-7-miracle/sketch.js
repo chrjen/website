@@ -6,17 +6,21 @@ const G = {
     da: 0.1,
     colours: [],
 
+    rf: 0.8,
+    rrf: 0.8,
+
+    nSegments: 6000,
+
     get r() {
-        const w = window.innerWidth / 2 * 0.8;
-        const h = window.innerHeight / 2 * 0.8;
+        const w = window.innerWidth / 2 * this.rf;
+        const h = window.innerHeight / 2 * this.rf;
         return w < h ? w : h;
     },
 
     set n(value) {
         value = Math.round(value * 100) / 100;
         this._n = value;
-        sliderN.value(value);
-        inputN.value(value);
+        inputN.value = value;
         updateUrlParams();
     },
 
@@ -27,8 +31,7 @@ const G = {
     set g(value) {
         value = Math.round(value * 100) / 100;
         this._g = value;
-        sliderG.value(value);
-        inputG.value(value);
+        inputG.value = value;
         updateUrlParams();
     },
 
@@ -46,7 +49,7 @@ const G = {
     },
 
     get rrr() {
-        return 0.8 * this.rr;
+        return this.rr * this.rrf;
     },
 }
 
@@ -55,17 +58,18 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
 let primaryPts = [];
 let secondaryPts = [];
 
-let sliderN;
-let sliderG;
-
-let nSegments = 1000;
-
+let inputN;
+let inputG;
+let inputSize;
+let inputRadius;
+let inputResolution;
 
 
 function setup() {
-    div = createDiv("Hello");
+    // div = createDiv("Hello");
 
     if (isMobile) {
+        G.nSegments = 1000;
         createCanvas(windowWidth, windowHeight, WEBGL);
     } else {
         createCanvas(windowWidth, windowHeight);
@@ -83,38 +87,20 @@ function setup() {
         color(234, 30, 190),
     ];
 
-    sliderN = createSlider(-12, 12, G.n, 0.25);
-    inputN = createInput(String(G.n), 'number');
-    createDiv("n").
-        position(10, 10).
-        style('text-align', 'right').
-        style('width', '40px');
-    sliderN.position(60, 10);
-    sliderN.size(150);
-    inputN.position(220, 10);
-    inputN.size(60);
+    inputN = new SliderInput("n", -12, 12, G.n, 0.25);
+    inputN.onchange = function (value) { G.n = Number(value); };
 
-    sliderG = createSlider(-12, 12, G.g, 1);
-    inputG = createInput(String(G.g), 'number');
-    createDiv("g").
-        position(10, 40).
-        style('text-align', 'right').
-        style('width', '40px');
-    sliderG.position(60, 40);
-    sliderG.size(150);
-    inputG.position(220, 40);
-    inputG.size(60);
+    inputG = new SliderInput("g", -12, 12, G.g, 0.25);
+    inputG.onchange = function (value) { G.g = Number(value); };
+    
+    inputSize = new SliderInput("size", 0, 1, G.rf, 0.01);
+    inputSize.onchange = function(value) { G.rf = Number(value); };
 
-    let updateG = function () { G.g = Number(this.value()); }
-    let updateN = function () { G.n = Number(this.value()); }
+    inputRadius = new SliderInput("radius", 0, 1, G.rrf, 0.01);
+    inputRadius.onchange = function(value) { G.rrf = Number(value); };
 
-    sliderG.input(updateG.bind(sliderG));
-    inputG.elt.onblur = updateG.bind(inputG);
-    inputG.elt.onchange = updateG.bind(inputG);
-
-    sliderN.input(updateN.bind(sliderN));
-    inputN.elt.onblur = updateN.bind(inputN);
-    inputN.elt.onchange = updateN.bind(inputN);
+    inputResolution = new SliderInput("res", 100, 15000, G.nSegments, 100);
+    inputResolution.onchange = function(value) { G.nSegments = Number(value); };
 
     // Read URL parameters
     const params = new URLSearchParams(window.location.search);
@@ -124,7 +110,6 @@ function setup() {
     if (params.get('g')) {
         G.g = Number(params.get('g'));
     }
-
 }
 
 function windowResized() {
@@ -132,10 +117,6 @@ function windowResized() {
 }
 
 function draw() {
-    // if (keyIsPressed) {
-    //     G.n = Math.ceil((G.n + 0.01)*100) / 100;
-    // }
-
     push();
 
     background(255);
@@ -212,7 +193,7 @@ function boundingCircle() {
 function drawGraph() {
     const period = Math.abs(swm(G.n) * TAU * swm(G.g) * G.g);
     let count = gcd(G.n, G.g);
-    const da = period / nSegments * count;
+    const da = period / G.nSegments * count;
 
     noFill();
     strokeWeight(3);

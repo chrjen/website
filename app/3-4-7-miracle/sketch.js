@@ -65,6 +65,14 @@ let inputRadius;
 let inputSpeed;
 let inputResolution;
 
+let checkBorder;
+let checkCircles;
+let checkPrimaryPolygon;
+let checkSecondaryPolygon;
+let checkPoints;
+let checkPath;
+let checkDark;
+
 
 function setup() {
     // div = createDiv("Hello");
@@ -93,18 +101,41 @@ function setup() {
 
     inputG = new SliderInput("g", -12, 12, G.g, 0.25);
     inputG.onchange = function (value) { G.g = Number(value); };
-    
+
     inputSize = new SliderInput("size", 0, 1, G.rf, 0.01);
-    inputSize.onchange = function(value) { G.rf = Number(value); };
+    inputSize.onchange = function (value) { G.rf = Number(value); };
 
     inputRadius = new SliderInput("radius", 0, 1, G.rrf, 0.01);
-    inputRadius.onchange = function(value) { G.rrf = Number(value); };
+    inputRadius.onchange = function (value) { G.rrf = Number(value); };
 
     inputSpeed = new SliderInput("speed", 0, 1, G.da, 0.01);
-    inputSpeed.onchange = function(value) { G.da = Number(value); };
+    inputSpeed.onchange = function (value) { G.da = Number(value); };
 
     inputResolution = new SliderInput("res", 100, 15000, G.nSegments, 100);
-    inputResolution.onchange = function(value) { G.nSegments = Number(value); };
+    inputResolution.onchange = function (value) { G.nSegments = Number(value); };
+
+    checkBorder = createCheckbox("border", true);
+    checkBorder.position(60, SliderInput.yoffset);
+
+    checkCircles = createCheckbox("circles", true);
+    checkCircles.position(180, SliderInput.yoffset);
+    checkPrimaryPolygon = createCheckbox("primary poly", true);
+    checkPrimaryPolygon.position(60, SliderInput.yoffset + 20);
+    checkSecondaryPolygon = createCheckbox("secondary poly", true);
+    checkSecondaryPolygon.position(180, SliderInput.yoffset + 20);
+    checkPoints = createCheckbox("points", true);
+    checkPoints.position(60, SliderInput.yoffset + 40);
+    checkPath = createCheckbox("path", true);
+    checkPath.position(180, SliderInput.yoffset + 40);
+    checkDark = createCheckbox("dark", false);
+    checkDark.position(60, SliderInput.yoffset + 75);
+    checkDark.changed(function () {
+        if (this.checked()) {
+            select('body').class('dark');
+        } else {
+            select('body').class('');
+        }
+    });
 
     // Read URL parameters
     const params = new URLSearchParams(window.location.search);
@@ -123,7 +154,11 @@ function windowResized() {
 function draw() {
     push();
 
-    background(255);
+    if (checkDark.checked()) {
+        background(0, 20, 40);
+    } else {
+        background(255);
+    }
     if (!isMobile) {
         translate(width / 2, height / 2);
     }
@@ -137,15 +172,32 @@ function draw() {
 
     calcPoints();
 
-    drawGraph();
-    drawCircles();
-    boundingCircle();
-    drawPrimaryPolygons();
-    drawSecondaryPolygons();
-    drawPoints();
+    if (checkPath.checked()) {
+        drawGraph();
+    }
+    if (checkCircles.checked()) {
+        drawCircles();
+    }
+    if (checkBorder.checked()) {
+        boundingCircle();
+    }
+    if (checkPrimaryPolygon.checked()) {
+        drawPrimaryPolygons();
+    }
+    if (checkSecondaryPolygon.checked()) {
+        drawSecondaryPolygons();
+    }
+    if (checkPoints.checked()) {
+        drawPoints();
+    }
 
     pop();
 
+    if (checkDark.checked()) {
+        fill(255);
+    } else {
+        fill(0);
+    }
     textSize(48);
     textAlign(RIGHT);
     text(`{${G.n}/${G.g}}`, windowWidth - 60, 60);
@@ -196,8 +248,12 @@ function calcPoints() {
 
 function boundingCircle() {
     noFill();
-    stroke(0, 0, 0);
-    strokeWeight(3);
+    if (checkDark.checked()) {
+        stroke(255);
+    } else {
+        stroke(0);
+    }
+    strokeWeight(2);
     circle(0, 0, 2 * G.r);
 }
 
@@ -207,7 +263,7 @@ function drawGraph() {
     const da = period / G.nSegments * count;
 
     noFill();
-    strokeWeight(3);
+    strokeWeight(2);
     for (let i = 0; i < count; i++) {
 
         stroke(G.colours[i % G.colours.length]);
@@ -228,7 +284,7 @@ function drawGraph() {
 function drawCircles() {
     noFill();
     stroke(255, 200, 0);
-    strokeWeight(3);
+    strokeWeight(2);
     for (p of primaryPts) {
         circle(p.x, p.y, 2 * G.rr);
     }

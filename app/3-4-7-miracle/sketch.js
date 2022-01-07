@@ -101,6 +101,8 @@ let checkSecondaryPolygon;
 let checkPoints;
 let checkPath;
 let checkDark;
+let checkNegatives;
+let checkRationals;
 
 
 function setup() {
@@ -109,6 +111,7 @@ function setup() {
 
     if (isMobile) {
         G.nSegments = 1000;
+        setAttributes('antialias', true);
         createCanvas(windowWidth, windowHeight, WEBGL);
     } else {
         createCanvas(windowWidth, windowHeight);
@@ -126,10 +129,10 @@ function setup() {
         color(234, 30, 190),
     ];
 
-    inputN = new SliderInput("n", -12, 12, G.n, 0.25);
+    inputN = new SliderInput("n", 1, 12, G.n, 1);
     inputN.onchange = function (value) { G.n = Number(value); };
 
-    inputG = new SliderInput("g", -12, 12, G.g, 0.25);
+    inputG = new SliderInput("g", 1, 12, G.g, 1);
     inputG.onchange = function (value) { G.g = Number(value); };
 
     inputSize = new SliderInput("size", 0, 1, G.rf, 0.01);
@@ -193,6 +196,30 @@ function setup() {
             select('body').class('dark');
         } else {
             select('body').class('');
+        }
+    });
+
+    checkNegatives = createCheckbox("negatives", false);
+    checkNegatives.position(180, SliderInput.yoffset + 75);
+    checkNegatives.changed(function () {
+       if (this.checked()) {
+            inputN.slider.elt.min = -12;
+            inputG.slider.elt.min = -12;
+        } else {
+            inputN.slider.elt.min = 1;
+            inputG.slider.elt.min = 1;
+       }
+    });
+
+    checkRationals = createCheckbox("rationals", false);
+    checkRationals.position(60, SliderInput.yoffset + 95);
+    checkRationals.changed(function () {
+        if (this.checked()) {
+            inputN.slider.elt.step = 0.25;
+            inputG.slider.elt.step = 0.25;
+        } else {
+            inputN.slider.elt.step = 1;
+            inputG.slider.elt.step = 1;
         }
     });
 

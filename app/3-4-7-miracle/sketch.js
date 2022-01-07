@@ -2,12 +2,11 @@ const G = {
     _r: 180,
     _n: 7,
     _g: 3,
+    _rf: 0.8,
+    _rrf: 0.8,
+    _da: 0.1,
     a: 0,
-    da: 0.1,
     colours: [],
-
-    rf: 0.8,
-    rrf: 0.8,
 
     nSegments: 6000,
 
@@ -21,7 +20,7 @@ const G = {
         value = Math.round(value * 100) / 100;
         this._n = value;
         inputN.value = value;
-        updateUrlParams();
+        setUrlParams('n', this._n);
     },
 
     get n() {
@@ -32,7 +31,7 @@ const G = {
         value = Math.round(value * 100) / 100;
         this._g = value;
         inputG.value = value;
-        updateUrlParams();
+        setUrlParams('g', this._g);
     },
 
     get g() {
@@ -42,6 +41,36 @@ const G = {
     get ng() {
         let ng = this.n - this.g;
         return ng < 0 ? -ng : ng;
+    },
+
+    get da() {
+        return this._da;
+    },
+
+    set da(value) {
+        this._da = value;
+        inputSpeed.value = value;
+        setUrlParams("da", this._da);
+    },
+
+    get rf() {
+        return this._rf;
+    },
+
+    set rf(value) {
+        this._rf = value;
+        inputSize.value = value;
+        setUrlParams("sz", this._rf);
+    },
+    
+    get rrf() {
+        return this._rrf;
+    },
+    
+    set rrf(value) {
+        this._rrf = value;
+        inputRadius.value = value;
+        setUrlParams("r", this._rrf);
     },
 
     get rr() {
@@ -75,7 +104,8 @@ let checkDark;
 
 
 function setup() {
-    // div = createDiv("Hello");
+    // Read URL parameters
+    const params = new URLSearchParams(window.location.search);
 
     if (isMobile) {
         G.nSegments = 1000;
@@ -114,22 +144,51 @@ function setup() {
     inputResolution = new SliderInput("res", 100, 15000, G.nSegments, 100);
     inputResolution.onchange = function (value) { G.nSegments = Number(value); };
 
-    checkBorder = createCheckbox("border", true);
-    checkBorder.position(60, SliderInput.yoffset);
+    function checkboxUrlParam(name) {
+        return function() {
+            setUrlParams(name, this.checked());
+        }
+    }
 
-    checkCircles = createCheckbox("circles", true);
+    function paramBoolOr(name, def) {
+        if (params.get(name)) {
+            return params.get(name) === 'true';
+        }
+        return def;
+    }
+
+    checkBorder = createCheckbox("border", paramBoolOr('bo', true));
+    checkBorder.position(60, SliderInput.yoffset);
+    checkBorder.changed(checkboxUrlParam('bo'));
+
+    checkCircles = createCheckbox("circles", paramBoolOr('ci', true));
     checkCircles.position(180, SliderInput.yoffset);
-    checkPrimaryPolygon = createCheckbox("primary poly", true);
+    checkCircles.changed(checkboxUrlParam('ci'));
+    
+    checkPrimaryPolygon = createCheckbox("primary poly", paramBoolOr('pp', true));
     checkPrimaryPolygon.position(60, SliderInput.yoffset + 20);
-    checkSecondaryPolygon = createCheckbox("secondary poly", true);
+    checkPrimaryPolygon.changed(checkboxUrlParam('pp'));
+    
+    checkSecondaryPolygon = createCheckbox("secondary poly", paramBoolOr('sp', true));
     checkSecondaryPolygon.position(180, SliderInput.yoffset + 20);
-    checkPoints = createCheckbox("points", true);
+    checkSecondaryPolygon.changed(checkboxUrlParam('sp'));
+    
+    checkPoints = createCheckbox("points", paramBoolOr('po', true));
     checkPoints.position(60, SliderInput.yoffset + 40);
-    checkPath = createCheckbox("path", true);
+    checkPoints.changed(checkboxUrlParam('po'));
+    
+    checkPath = createCheckbox("path", paramBoolOr('pa', true));
     checkPath.position(180, SliderInput.yoffset + 40);
-    checkDark = createCheckbox("dark", false);
+    checkPath.changed(checkboxUrlParam('pa'));
+    
+    let useDark = paramBoolOr('dark');
+    if (useDark) {
+        select('body').class('dark');
+    }
+    checkDark = createCheckbox("dark", useDark);
     checkDark.position(60, SliderInput.yoffset + 75);
     checkDark.changed(function () {
+        setUrlParams('dark', this.checked());
         if (this.checked()) {
             select('body').class('dark');
         } else {
@@ -137,13 +196,20 @@ function setup() {
         }
     });
 
-    // Read URL parameters
-    const params = new URLSearchParams(window.location.search);
     if (params.get('n')) {
         G.n = Number(params.get('n'));
     }
     if (params.get('g')) {
         G.g = Number(params.get('g'));
+    }
+    if (params.get('sz')) {
+        G.rf = Number(params.get('sz'));
+    }
+    if (params.get('r')) {
+        G.rrf = Number(params.get('r'));
+    }
+    if (params.get('da')) {
+        G.da = Number(params.get('da'));
     }
 }
 
@@ -205,10 +271,9 @@ function draw() {
     G.a += G.da / 7;
 }
 
-function updateUrlParams() {
-    const params = new URLSearchParams();
-    params.set('n', G.n);
-    params.set('g', G.g);
+function setUrlParams(name, value) {
+    const params = new URLSearchParams(window.location.search);
+    params.set(name, value);
     window.history.replaceState({}, '', "?" + params.toString());
 }
 
@@ -292,7 +357,7 @@ function drawCircles() {
 
 function drawPoints() {
     stroke(255, 0, 0);
-    strokeWeight(10);
+    strokeWeight(8);
     for (p of secondaryPts) {
         point(p.x, p.y);
     }

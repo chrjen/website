@@ -306,7 +306,7 @@ function drawPrimaryPolygons() {
     noFill();
     stroke(0, 100, 255);
     strokeWeight(2);
-    let gg = Math.abs(Math.ceil(G.g));
+    let gg = Math.ceil(Math.abs(G.g));
     for (let i = 0; i < G.ng; i++) {
         beginShape();
         for (let j = 0; j < gg + 1; j++) {
@@ -327,7 +327,7 @@ function drawSecondaryPolygons() {
     noFill();
     stroke(0, 200, 255);
     strokeWeight(2);
-    let gg = Math.abs(Math.ceil(G.g));
+    let gg = Math.ceil(Math.abs(G.g));
     for (let i = 0; i < gg; i++) {
         beginShape();
         for (let j = 0; j < G.ng + 1; j++) {

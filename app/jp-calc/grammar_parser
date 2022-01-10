@@ -1,8 +1,0 @@
-expr: term ((PLUS|MINUS) term)*
-
-term: factor ((MULTIPLY|DIVIDE) factor)*
-
-factor: NUMBER
-factor: PLUS factor
-factor: MINUS factor
-factor: LPAREN expr RPAREN

@@ -1,1 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Christer Jensen</title><link>https://chrjen.com/</link><description>Recent content on Christer Jensen</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 28 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://chrjen.com/index.xml" rel="self" type="application/rss+xml"/></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Christer Jensen</title><link>https://chrjen.com/</link><description>Recent content on Christer Jensen</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 10 Jan 2022 18:23:29 +0100</lastBuildDate><atom:link href="https://chrjen.com/index.xml" rel="self" type="application/rss+xml"/><item><title>First Post</title><link>https://chrjen.com/p/first-post/</link><pubDate>Mon, 10 Jan 2022 18:23:29 +0100</pubDate><guid>https://chrjen.com/p/first-post/</guid><description>&lt;h2 id="summary">Summary&lt;/h2>
+&lt;p>This is a simple post to test Hugo.&lt;/p>
+&lt;h2 id="code-formatting">Code formatting&lt;/h2>
+&lt;p>Typical go «Hello, World!» style program.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-golang" data-lang="golang">&lt;span class="kn">import&lt;/span> &lt;span class="s">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;span class="kd">func&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;Hello, 世界!&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="math-formatting">Math formatting&lt;/h2>
+&lt;p>Solving $ax^2 + bx + c = 0$ for $x$ we get the following equation.
+$$ x = \frac{-b±\sqrt{b^2-4ac}}{2a} $$&lt;/p></description></item></channel></rss>

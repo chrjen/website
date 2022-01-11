@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本漢字電卓</title>
+
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js"></script>
+</head>
+<body>
+    <main class="vertical">
+        <div id="input-container">
+            <h1>日本漢字電卓</h1>
+            <div>
+                <label>縦書き</label>
+                <input type="checkbox" id="checkbox-vertical" onclick="changeTextDir()" checked>
+            </dic>
+            <div>
+                <label for="input">算数問題入力</label>
+                <input type="text" id="input" name="input">
+                <button onclick="input()">割り出し</button>
+            </div>
+        </div>
+        <div id="results-container">
+            <div id="results">
+                <div class="result">
+                    <div><span class="lparen paren">（</span><span class="number">一</span><span class="op bin-op">＋</span><span class="lparen paren">（</span><span class="number">三</span><span class="op bin-op">＊</span><span class="number">九十</span><span class="rparen paren">）</span><span class="rparen paren">）</span>
+                    </div>
+                    <div>二百七十一</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

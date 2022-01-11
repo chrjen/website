@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+}
+
+main {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    justify-items: center;
+    grid-template-rows: auto 1fr;
+}
+
+main.vertical {
+    justify-items: right;
+}
+
+#input-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 2em 0 2em;
+}
+
+#results-container {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.vertical #results-container {
+    writing-mode: vertical-rl;
+    letter-spacing: 0.25em;
+}
+
+#results {
+    margin-top: 1.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content;
+}
+
+#results .result {
+    overflow: hidden;
+    margin: 0.5em;
+    width: fit-content;
+    border-radius: 0.5em;
+}
+
+#results .result div {
+    padding: 0.25em 0.5em 0.25em 0.5em;
+    padding-inline-start: 0.5em;
+    padding-inline-end: 1em;
+}
+
+#results .result div:first-child {
+    background-color: #dddddd;
+    color: #222;
+}
+
+#results .result div:first-child::before {
+    /* margin-inline-end: 0.75em; */
+    color: #707070;
+    content: "入力 》";
+}
+
+#results .result div:last-child {
+    background-color: #606060;
+    color: white;
+}
+
+#results .result div:last-child::before {
+    /* margin-inline-end: 0.75em; */
+    color: #aaaaaa;
+    content: "出力 》";
+}
+
+span {
+    display: inline-block;
+    /* border: 1px solid red; */
+    text-align: center;
+}
+
+.result .number {
+    font-weight: 400;
+}
+
+.result .paren {
+    color: #c46420;
+}
+
+.result .lparen {
+    margin-inline-start: -0.5em;
+}
+
+.result .rparen {
+    margin-inline-end: -0.5em;
+}
+
+.result .op {
+    /* font-size: smaller; */
+    /* font-weight: 600; */
+    margin-inline-start: 0.15em;
+    margin-inline-end: 0.15em;
+    transform: scale(0.65);
+    color: #9a9a9a;
+}

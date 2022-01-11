@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code visualiser</title>
+
+    <!-- CodeMirror library -->
+    <script src="codemirror/codemirror-5.57.0/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="codemirror/codemirror-5.57.0/lib/codemirror.css">
+    <link rel="stylesheet" href="codemirror/codemirror-5.57.0/theme/monokai.css">
+    <script src="codemirror/codemirror-5.57.0/mode/javascript/javascript.js"></script>
+    
+    <!-- App specific -->
+    <link rel="stylesheet" href="style.css">
+
+    <script src="script.js"></script>
+</head>
+<body onload="onBodyLoad()">
+    <header>
+        <h1>Code visualiser</h1>
+    </header>
+    <section id="code-container">
+        <div id="editor-container">
+
+        </div>
+        <button onclick="runCode()">Run code</button>
+    </section>
+    <section id="visualiser-container">
+
+    </section>
+</body>
+</html>

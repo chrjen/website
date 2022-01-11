@@ -1,7 +1,7 @@
 ---
 title: "First Post"
 date: 2022-01-10T18:23:29+01:00
-draft: true
+draft: false
 author: "Christer Jensen"
 ---
 

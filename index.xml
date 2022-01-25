@@ -1,4 +1,84 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Christer Jensen</title><link>https://chrjen.com/</link><description>Recent content on Christer Jensen</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 10 Jan 2022 18:23:29 +0100</lastBuildDate><atom:link href="https://chrjen.com/index.xml" rel="self" type="application/rss+xml"/><item><title>First Post</title><link>https://chrjen.com/p/first-post/</link><pubDate>Mon, 10 Jan 2022 18:23:29 +0100</pubDate><guid>https://chrjen.com/p/first-post/</guid><description>&lt;h2 id="summary">Summary&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Christer Jensen</title><link>https://chrjen.com/</link><description>Recent content on Christer Jensen</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 25 Jan 2022 17:40:34 +0100</lastBuildDate><atom:link href="https://chrjen.com/index.xml" rel="self" type="application/rss+xml"/><item><title>PulseAudio — Combining Two or More Output Devices</title><link>https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/</link><pubDate>Tue, 25 Jan 2022 17:40:34 +0100</pubDate><guid>https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/</guid><description>&lt;img src="https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/pexels-dmitry-demidov-3784424.jpg" alt="Featured image of post PulseAudio — Combining Two or More Output Devices" />&lt;p>About how I combined the speakers in my two monitors into a single virtual
+audio device that can be used to play back audio.&lt;/p>
+&lt;h2 id="debugging-pulseaudio">Debugging PulseAudio&lt;/h2>
+&lt;p>Before doing anything it can be useful to run PulseAudio in a terminal in order
+to get its output and/or possible error messages. First stop any existing
+PulseAudio daemon, example for systemd, and start locally.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="c1"># Remove &amp;#39;--user&amp;#39; if running system wide.&lt;/span>
+$ systemctl --user stop pulseaudio
+$ pulseaudio -v
+&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="configure-pulseaudio">Configure PulseAudio&lt;/h2>
+&lt;p>Open the file &lt;code>/etc/pulse/default.pa&lt;/code> if it does not contain the following line
+add it at the end. This allows you to keep configurations in separate files
+rather than having to modify &lt;code>default.pa&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-ini" data-lang="ini">&lt;span class="c1"># /etc/pulse/default.pa&lt;/span>
+&lt;span class="na">.include /etc/pulse/default.pa.d&lt;/span>
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>Create the directory &lt;code>default.pa.d&lt;/code> if it doesn&amp;rsquo;t already exist. Inside create
+a file with the following content.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="c1"># Creates an sink (output) for each of the monitors.&lt;/span>
+load-module module-alsa-sink &lt;span class="nv">device&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;hw:1,1&amp;#34;&lt;/span> &lt;span class="nv">sink_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;vsink_left_monitor&amp;#34;&lt;/span> &lt;span class="nv">sink_properties&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;device.description=&amp;#39;Left 4K Monitor&amp;#39;&amp;#34;&lt;/span>
+load-module module-alsa-sink &lt;span class="nv">device&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;hw:1,3&amp;#34;&lt;/span> &lt;span class="nv">sink_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;vsink_right_monitor&amp;#34;&lt;/span> &lt;span class="nv">sink_properties&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;device.description=&amp;#39;Right 4K Monitor&amp;#39;&amp;#34;&lt;/span>
+&lt;span class="c1"># Creates a virtual sink that combines the two monitor outputs into a single output device.&lt;/span>
+load-module module-combine-sink &lt;span class="nv">sink_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;vsink_dual_monitor&amp;#34;&lt;/span> &lt;span class="nv">sink_properties&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;device.description=&amp;#39;Dual 4K Monitors Stereo&amp;#39;&amp;#34;&lt;/span> &lt;span class="nv">slaves&lt;/span>&lt;span class="o">=&lt;/span>vsink_left_monitor,vsink_right_monitor &lt;span class="nv">channels&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">2&lt;/span> &lt;span class="nv">channel_map&lt;/span>&lt;span class="o">=&lt;/span>left,right
+&lt;/code>&lt;/pre>&lt;/div>&lt;p>In my case each monitor did not show up as a separate sink (output), only the
+one currently set as active profile on the card.&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup> To get this to work I first
+turned off the card (using pulsemixer in my case), then following this helpful
+answer on StackExchange&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup> I create new sinks for each device I wanted to
+combine together using the alsa sink module. &lt;code>hw:1,3&lt;/code> needs to be customised per
+setup. The first number is the card ID, the second is the device ID alsa use.
+These numbers can be gotten using &lt;code>aplay -l&lt;/code> or &lt;code>pacmd list-sinks&lt;/code>.&lt;/p>
+&lt;p>The second part uses the combine sink module to combine the sinks together to
+a new virtual sink.&lt;/p>
+&lt;blockquote>
+&lt;p>If using PulseAudio system wide then use &lt;code>system.pa&lt;/code> instead of &lt;code>default.pa&lt;/code>.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="stereo-output">Stereo output&lt;/h3>
+&lt;p>When playing something on the new combined output there should appear a
+«Simultaneous output…» on either monitor&amp;rsquo;s output. In Pulsemixer, by hitting
+space, it is possible to adjust the volume of either channel separately. On the
+left monitor reduce the right channel&amp;rsquo;s volume to zero, and the opposite on the
+right monitor.&lt;/p>
+&lt;p>Now the left channel should only come from the left monitor and right channel
+from the right.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 200;
+flex-basis: 480px"
+>
+&lt;a href="https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/pulsemixer-stereo-example.png" data-size="1538x769">
+&lt;img src="https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/pulsemixer-stereo-example.png"
+width="1538"
+height="769"
+srcset="https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/pulsemixer-stereo-example_hua8b4bd89aa3b46b08377459c650c1a7a_78221_480x0_resize_box_3.png 480w, https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/pulsemixer-stereo-example_hua8b4bd89aa3b46b08377459c650c1a7a_78221_1024x0_resize_box_3.png 1024w"
+loading="lazy"
+alt="Pulsemixer setup with stereo">
+&lt;/a>
+&lt;figcaption>Pulsemixer setup with stereo&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="other-useful-links">Other useful links&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/Modules/" target="_blank" rel="noopener"
+>PulseAudio modules&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://wiki.archlinux.org/title/PulseAudio" target="_blank" rel="noopener"
+>Arch Wiki — PulseAudio&lt;/a>&lt;/li>
+&lt;li>&lt;a class="link" href="https://wiki.archlinux.org/title/PulseAudio/Examples" target="_blank" rel="noopener"
+>Arch Wiki — PulseAudio/Examples&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>&lt;em>Thumbnail by Dmitry Demidov from Pexels&lt;/em>&lt;/p>
+&lt;section class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1" role="doc-endnote">
+&lt;p>&lt;a class="link" href="https://gavv.github.io/articles/pulseaudio-under-the-hood/" target="_blank" rel="noopener"
+>Useful info on how PulseAudio works.&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2" role="doc-endnote">
+&lt;p>&lt;a class="link" href="https://askubuntu.com/a/1213557/500885" target="_blank" rel="noopener"
+>StackExchange answer&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/section></description></item><item><title>First Post</title><link>https://chrjen.com/p/first-post/</link><pubDate>Mon, 10 Jan 2022 18:23:29 +0100</pubDate><guid>https://chrjen.com/p/first-post/</guid><description>&lt;h2 id="summary">Summary&lt;/h2>
 &lt;p>This is a simple post to test Hugo.&lt;/p>
 &lt;h2 id="code-formatting">Code formatting&lt;/h2>
 &lt;p>Typical go «Hello, World!» style program.&lt;/p>

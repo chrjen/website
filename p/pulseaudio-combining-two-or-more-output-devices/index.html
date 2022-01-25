@@ -1,0 +1,208 @@
+<!doctype html><html lang=en-us>
+<head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="How to combine two pulse audio outputs into a single virtual output."><title>PulseAudio — Combining Two or More Output Devices</title>
+<link rel=canonical href=https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/>
+<link rel=stylesheet href=/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css><meta property="og:title" content="PulseAudio — Combining Two or More Output Devices">
+<meta property="og:description" content="How to combine two pulse audio outputs into a single virtual output.">
+<meta property="og:url" content="https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/">
+<meta property="og:site_name" content="Christer Jensen">
+<meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2022-01-25T17:40:34+01:00"><meta property="article:modified_time" content="2022-01-25T17:40:34+01:00"><meta property="og:image" content="https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/pexels-dmitry-demidov-3784424.jpg">
+<meta name=twitter:title content="PulseAudio — Combining Two or More Output Devices">
+<meta name=twitter:description content="How to combine two pulse audio outputs into a single virtual output."><meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://chrjen.com/p/pulseaudio-combining-two-or-more-output-devices/pexels-dmitry-demidov-3784424.jpg">
+</head>
+<body class="article-page has-toc">
+<script>(function(){const a='StackColorScheme';localStorage.getItem(a)||localStorage.setItem(a,"auto")})()</script><script>(function(){const b='StackColorScheme',a=localStorage.getItem(b),c=window.matchMedia('(prefers-color-scheme: dark)').matches===!0;a=='dark'||a==='auto'&&c?document.documentElement.dataset.scheme='dark':document.documentElement.dataset.scheme='light'})()</script>
+<div class="container main-container flex
+extended">
+<div id=article-toolbar>
+<a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg>
+<span>Back</span>
+</a>
+</div>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class=article-header>
+<div class=article-image>
+<a href=/p/pulseaudio-combining-two-or-more-output-devices/>
+<img src=/p/pulseaudio-combining-two-or-more-output-devices/pexels-dmitry-demidov-3784424_hu3d03a01dcc18bc5be0e67db3d8d209a6_147372_800x0_resize_q75_box.jpg srcset="/p/pulseaudio-combining-two-or-more-output-devices/pexels-dmitry-demidov-3784424_hu3d03a01dcc18bc5be0e67db3d8d209a6_147372_800x0_resize_q75_box.jpg 800w, /p/pulseaudio-combining-two-or-more-output-devices/pexels-dmitry-demidov-3784424_hu3d03a01dcc18bc5be0e67db3d8d209a6_147372_1600x0_resize_q75_box.jpg 1600w" width=800 height=533 loading=lazy alt="Featured image of post PulseAudio — Combining Two or More Output Devices">
+</a>
+</div>
+<div class=article-details>
+<header class=article-category>
+<a href=/categories/pulseaudio/>
+PulseAudio
+</a>
+<a href=/categories/linux/>
+Linux
+</a>
+<a href=/categories/arch-linux/>
+Arch Linux
+</a>
+</header>
+<h2 class=article-title>
+<a href=/p/pulseaudio-combining-two-or-more-output-devices/>PulseAudio — Combining Two or More Output Devices</a>
+</h2>
+<h3 class=article-subtitle>
+How to combine two pulse audio outputs into a single virtual output.
+</h3>
+<footer class=article-time>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jan 25, 2022</time>
+</div>
+<div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>
+2 minute read
+</time>
+</div>
+</footer>
+</div>
+</header>
+<section class=article-content>
+<p>About how I combined the speakers in my two monitors into a single virtual
+audio device that can be used to play back audio.</p>
+<h2 id=debugging-pulseaudio>Debugging PulseAudio</h2>
+<p>Before doing anything it can be useful to run PulseAudio in a terminal in order
+to get its output and/or possible error messages. First stop any existing
+PulseAudio daemon, example for systemd, and start locally.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># Remove &#39;--user&#39; if running system wide.</span>
+$ systemctl --user stop pulseaudio
+$ pulseaudio -v
+</code></pre></div><h2 id=configure-pulseaudio>Configure PulseAudio</h2>
+<p>Open the file <code>/etc/pulse/default.pa</code> if it does not contain the following line
+add it at the end. This allows you to keep configurations in separate files
+rather than having to modify <code>default.pa</code>.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=c1># /etc/pulse/default.pa</span>
+<span class=na>.include /etc/pulse/default.pa.d</span>
+</code></pre></div><p>Create the directory <code>default.pa.d</code> if it doesn&rsquo;t already exist. Inside create
+a file with the following content.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=c1># Creates an sink (output) for each of the monitors.</span>
+load-module module-alsa-sink <span class=nv>device</span><span class=o>=</span><span class=s2>&#34;hw:1,1&#34;</span> <span class=nv>sink_name</span><span class=o>=</span><span class=s2>&#34;vsink_left_monitor&#34;</span> <span class=nv>sink_properties</span><span class=o>=</span><span class=s2>&#34;device.description=&#39;Left 4K Monitor&#39;&#34;</span>
+load-module module-alsa-sink <span class=nv>device</span><span class=o>=</span><span class=s2>&#34;hw:1,3&#34;</span> <span class=nv>sink_name</span><span class=o>=</span><span class=s2>&#34;vsink_right_monitor&#34;</span> <span class=nv>sink_properties</span><span class=o>=</span><span class=s2>&#34;device.description=&#39;Right 4K Monitor&#39;&#34;</span>
+
+<span class=c1># Creates a virtual sink that combines the two monitor outputs into a single output device.</span>
+load-module module-combine-sink <span class=nv>sink_name</span><span class=o>=</span><span class=s2>&#34;vsink_dual_monitor&#34;</span> <span class=nv>sink_properties</span><span class=o>=</span><span class=s2>&#34;device.description=&#39;Dual 4K Monitors Stereo&#39;&#34;</span> <span class=nv>slaves</span><span class=o>=</span>vsink_left_monitor,vsink_right_monitor <span class=nv>channels</span><span class=o>=</span><span class=m>2</span> <span class=nv>channel_map</span><span class=o>=</span>left,right
+</code></pre></div><p>In my case each monitor did not show up as a separate sink (output), only the
+one currently set as active profile on the card.<sup id=fnref:1><a href=#fn:1 class=footnote-ref role=doc-noteref>1</a></sup> To get this to work I first
+turned off the card (using pulsemixer in my case), then following this helpful
+answer on StackExchange<sup id=fnref:2><a href=#fn:2 class=footnote-ref role=doc-noteref>2</a></sup> I create new sinks for each device I wanted to
+combine together using the alsa sink module. <code>hw:1,3</code> needs to be customised per
+setup. The first number is the card ID, the second is the device ID alsa use.
+These numbers can be gotten using <code>aplay -l</code> or <code>pacmd list-sinks</code>.</p>
+<p>The second part uses the combine sink module to combine the sinks together to
+a new virtual sink.</p>
+<blockquote>
+<p>If using PulseAudio system wide then use <code>system.pa</code> instead of <code>default.pa</code>.</p>
+</blockquote>
+<h3 id=stereo-output>Stereo output</h3>
+<p>When playing something on the new combined output there should appear a
+«Simultaneous output…» on either monitor&rsquo;s output. In Pulsemixer, by hitting
+space, it is possible to adjust the volume of either channel separately. On the
+left monitor reduce the right channel&rsquo;s volume to zero, and the opposite on the
+right monitor.</p>
+<p>Now the left channel should only come from the left monitor and right channel
+from the right.</p>
+<p><figure class=gallery-image style=flex-grow:200;flex-basis:480px>
+<a href=/p/pulseaudio-combining-two-or-more-output-devices/pulsemixer-stereo-example.png data-size=1538x769>
+<img src=/p/pulseaudio-combining-two-or-more-output-devices/pulsemixer-stereo-example.png width=1538 height=769 srcset="/p/pulseaudio-combining-two-or-more-output-devices/pulsemixer-stereo-example_hua8b4bd89aa3b46b08377459c650c1a7a_78221_480x0_resize_box_3.png 480w, /p/pulseaudio-combining-two-or-more-output-devices/pulsemixer-stereo-example_hua8b4bd89aa3b46b08377459c650c1a7a_78221_1024x0_resize_box_3.png 1024w" loading=lazy alt="Pulsemixer setup with stereo">
+</a>
+<figcaption>Pulsemixer setup with stereo</figcaption>
+</figure></p>
+<h2 id=other-useful-links>Other useful links</h2>
+<ul>
+<li><a class=link href=https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/Modules/ target=_blank rel=noopener>PulseAudio modules</a></li>
+<li><a class=link href=https://wiki.archlinux.org/title/PulseAudio target=_blank rel=noopener>Arch Wiki — PulseAudio</a></li>
+<li><a class=link href=https://wiki.archlinux.org/title/PulseAudio/Examples target=_blank rel=noopener>Arch Wiki — PulseAudio/Examples</a></li>
+</ul>
+<p><em>Thumbnail by Dmitry Demidov from Pexels</em></p>
+<section class=footnotes role=doc-endnotes>
+<hr>
+<ol>
+<li id=fn:1 role=doc-endnote>
+<p><a class=link href=https://gavv.github.io/articles/pulseaudio-under-the-hood/ target=_blank rel=noopener>Useful info on how PulseAudio works.</a>&#160;<a href=#fnref:1 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+<li id=fn:2 role=doc-endnote>
+<p><a class=link href=https://askubuntu.com/a/1213557/500885 target=_blank rel=noopener>StackExchange answer</a>&#160;<a href=#fnref:2 class=footnote-backref role=doc-backlink>&#8617;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</section>
+<footer class=article-footer>
+</footer>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}]})})</script>
+</article>
+<aside class=related-contents--wrapper>
+</aside>
+<footer class=site-footer>
+<section class=copyright>
+&copy;
+2019 -
+2022 Christer Jensen
+</section>
+<section class=powerby>
+Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> <br>
+Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.6.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a>
+</section>
+</footer>
+<div class=pswp tabindex=-1 role=dialog aria-hidden=true>
+<div class=pswp__bg></div>
+<div class=pswp__scroll-wrap>
+<div class=pswp__container>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+<div class=pswp__item></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class=pswp__top-bar>
+<div class=pswp__counter></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class=pswp__preloader>
+<div class=pswp__preloader__icn>
+<div class=pswp__preloader__cut>
+<div class=pswp__preloader__donut></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class=pswp__share-tooltip></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class=pswp__caption>
+<div class=pswp__caption__center></div>
+</div>
+</div>
+</div>
+</div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous>
+</main>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg>
+</div>
+<h2 class="widget-title section-title">Table of contents</h2>
+<div class=widget--toc>
+<nav id=TableOfContents>
+<ol>
+<li><a href=#debugging-pulseaudio>Debugging PulseAudio</a></li>
+<li><a href=#configure-pulseaudio>Configure PulseAudio</a>
+<ol>
+<li><a href=#stereo-output>Stereo output</a></li>
+</ol>
+</li>
+<li><a href=#other-useful-links>Other useful links</a></li>
+</ol>
+</nav>
+</div>
+</section>
+</aside>
+</div>
+<script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script>
+<script>(function(){const a=document.createElement('link');a.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",a.type="text/css",a.rel="stylesheet",document.head.appendChild(a)})()</script>
+</body>
+</html>

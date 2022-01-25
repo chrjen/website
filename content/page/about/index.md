@@ -13,3 +13,5 @@ menu:
 ---
 
 About me page.
+
+Contact: chr.code@gmail.com
